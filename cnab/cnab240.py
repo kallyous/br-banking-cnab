@@ -102,16 +102,13 @@ class LoteCNAB240:
         if batch_type not in [item for item in BatchType]:
             raise CNAB240InvalidBatchType(batch_type)
 
-        # Carrega cabeçalho e rodapé de lotes de pagamentos a cheque, OP, DOC, TED, PIX e crédito em conta corrente.
-        elif batch_type == BatchType.Cheq_OP_DOC_TED_PIX_CredCC:
-            with open(batch_type.value.format('header'), 'r') as file:
-                self.batch_header = json.load(file, object_pairs_hook=OrderedDict)
-            with open(batch_type.value.format('trailer'), 'r') as file:
-                self.batch_trailer = json.load(file, object_pairs_hook=OrderedDict)
+        # Carrega template do cabeçalho do lote.
+        with open(batch_type.value.format('header'), 'r') as file:
+            self.batch_header = json.load(file, object_pairs_hook=OrderedDict)
 
-        # Carrega cabeçalho e rodapé de lotes de pagamentos via boleto ou QrCode PIX.
-        elif batch_type == BatchType.Boleto_PIXqrcode:
-            pass
+        # Carrega template do rodapé do lote.
+        with open(batch_type.value.format('trailer'), 'r') as file:
+            self.batch_trailer = json.load(file, object_pairs_hook=OrderedDict)
 
     def make(self, strict=True):
 

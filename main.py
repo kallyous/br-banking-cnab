@@ -1,6 +1,7 @@
 from cnab.cnab240 import ArquivoCNAB240, LoteCNAB240, RegistroCNAB240, BatchType
 
 if __name__ == '__main__':
+    print()
     cnab = ArquivoCNAB240()
     cnab.batches.append(LoteCNAB240(BatchType.Cheq_OP_DOC_TED_PIX_CredCC))
     cnab.batches.append(LoteCNAB240(BatchType.Cheq_OP_DOC_TED_PIX_CredCC))
