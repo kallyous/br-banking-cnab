@@ -11,11 +11,11 @@ TRAILER_FILE_DIR = os.path.join(CWD, DATA_DIR, 'trailer_file.json')
 
 def FileHeader(file_path=HEADER_FILE_DIR):
     with open(file_path, 'r') as file:
-        data = json.load(file)
-    return OrderedDict(data)
+        data = json.load(file, object_pairs_hook=OrderedDict)
+    return data
 
 
 def FileTrailer(file_path=TRAILER_FILE_DIR):
     with open(file_path, 'r') as file:
-        data = json.load(file)
-    return OrderedDict(data)
+        data = json.load(file, object_pairs_hook=OrderedDict)
+    return data
