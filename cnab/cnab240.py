@@ -54,6 +54,10 @@ class ArquivoCNAB240:
 
             data_str += val
 
+        # Passa por todos os lotes.
+        for batch in self.batches:
+            pass
+
         # Concatena conteúdo do trailer do arquivo de remessa.
         for key in self.file_trailer:
 

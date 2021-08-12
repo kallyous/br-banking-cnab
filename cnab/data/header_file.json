@@ -140,7 +140,7 @@
     "descr": "Complemento de registro."
   },
   "unidade_densidade": {
-    "val": null,
+    "val": 0,
     "index": 166,
     "size": 5,
     "type": "num",
