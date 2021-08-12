@@ -1,0 +1,65 @@
+{
+  "codigo_banco" : {
+    "val": 341,
+    "index": 0,
+    "size": 3,
+    "type": "num",
+    "descr": "Código do banco na compensação."
+  },
+  "codigo_lote": {
+    "val": null,
+    "index": 3,
+    "size": 4,
+    "type": "num",
+    "descr": "Lote de serviço."
+  },
+  "tipo_registro": {
+    "val": 5,
+    "index": 7,
+    "size": 1,
+    "type": "num",
+    "descr": "Registro do trailer de lote."
+  },
+  "brancos_a": {
+    "val": "",
+    "index": 8,
+    "size": 9,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "total_qtd_registros": {
+    "val": null,
+    "index": 17,
+    "size": 6,
+    "type": "num",
+    "descr": "Quantidade de registros do lote."
+  },
+  "total_valor_pagtos": {
+    "val": null,
+    "index": 23,
+    "size": 18,
+    "type": "num",
+    "descr": "Soma dos valores dos pagamentos do lote. Em centavos, sem vírgula."
+  },
+  "zeros": {
+    "val": 0,
+    "index": 41,
+    "size": 18,
+    "type": "num",
+    "descr": "Complemento de registro."
+  },
+  "brancos_b": {
+    "val": "",
+    "index": 59,
+    "size": 171,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "ocorrencias": {
+    "val": "",
+    "index": 230,
+    "size": 10,
+    "type": "alfanum",
+    "descr": "Códigos de ocorrências para retorno."
+  }
+}

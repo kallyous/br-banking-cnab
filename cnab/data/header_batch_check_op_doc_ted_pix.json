@@ -1,0 +1,198 @@
+{
+  "codigo_banco" : {
+    "val": 341,
+    "index": 0,
+    "size": 3,
+    "type": "num",
+    "descr": "Código do banco na compensação."
+  },
+  "codigo_lote": {
+    "val": null,
+    "index": 3,
+    "size": 4,
+    "type": "num",
+    "descr": "Identificação do lote de pagamentos."
+  },
+  "tipo_registro": {
+    "val": 1,
+    "index": 7,
+    "size": 1,
+    "type": "num",
+    "descr": "Registro header de arquivo."
+  },
+  "tipo_operacao": {
+    "val": "C",
+    "index": 8,
+    "size": 1,
+    "type": "alfanum",
+    "descr": "Tipo da operação."
+  },
+  "tipo_pagamento": {
+    "val": null,
+    "index": 9,
+    "size": 2,
+    "type": "num",
+    "descr": "Tipo de pagamento. Todos os pagamentos num mesmo lote devem ser do mesmo tipo."
+  },
+  "forma_pagamento": {
+    "val": null,
+    "index": 11,
+    "size": 2,
+    "type": "num",
+    "descr": "Tipo de inscrição da empresa. É 1 para CPF ou 2 para CNPJ."
+  },
+  "layout_lote": {
+    "val": 40,
+    "index": 13,
+    "size": 3,
+    "type": "num",
+    "descr": "Número da versão do layout do lote."
+  },
+  "brancos_a": {
+    "val": "",
+    "index": 16,
+    "size": 1,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "empresa_inscricao": {
+    "val": null,
+    "index": 17,
+    "size": 1,
+    "type": "num",
+    "descr": "Tipo de inscrição da empresa debitada. É 1 para CPF ou 2 para CNPJ."
+  },
+  "inscricao_numero": {
+    "val": null,
+    "index": 18,
+    "size": 14,
+    "type": "num",
+    "descr": "CNPJ da empresa debitada."
+  },
+  "identif_lancamen": {
+    "val": null,
+    "index": 32,
+    "size": 4,
+    "type": "alfanum",
+    "descr": "Identificação do lançamento no extrato do favorecido."
+  },
+  "brancos_b": {
+    "val": "",
+    "index": 36,
+    "size": 16,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "agencia": {
+    "val": null,
+    "index": 52,
+    "size": 5,
+    "type": "num",
+    "descr": "Número da agência debitada."
+  },
+  "brancos_c": {
+    "val": "",
+    "index": 57,
+    "size": 1,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "conta": {
+    "val": null,
+    "index": 58,
+    "size": 12,
+    "type": "num",
+    "descr": "Número da conta corrente debitada."
+  },
+  "brancos_d": {
+    "val": "",
+    "index": 70,
+    "size": 1,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "dac": {
+    "val": null,
+    "index": 71,
+    "size": 1,
+    "type": "num",
+    "descr": "DAC da agência/conta debitada."
+  },
+  "nome_empresa": {
+    "val": null,
+    "index": 72,
+    "size": 30,
+    "type": "alfanum",
+    "descr": "Nome da empresa."
+  },
+  "finalidade_lote": {
+    "val": null,
+    "index": 102,
+    "size": 30,
+    "type": "alfanum",
+    "descr": "Finalidade dos pagamentos do lote."
+  },
+  "historico_cc": {
+    "val": null,
+    "index": 132,
+    "size": 10,
+    "type": "alfanum",
+    "descr": "Complemento histórico de conta corrente debitada."
+  },
+  "endereco_empresa": {
+    "val": null,
+    "index": 142,
+    "size": 30,
+    "type": "alfanum",
+    "descr": "Nome da rua, av, praça, etc..."
+  },
+  "numero_ender": {
+    "val": null,
+    "index": 172,
+    "size": 5,
+    "type": "num",
+    "descr": "Número do prédio/estabelecimento."
+  },
+  "complemento_ender": {
+    "val": "",
+    "index": 177,
+    "size": 15,
+    "type": "alfanum",
+    "descr": "Casa, apto, sala, etc..."
+  },
+  "cidade": {
+    "val": null,
+    "index": 192,
+    "size": 20,
+    "type": "alfanum",
+    "descr": "Nome da cidade."
+  },
+  "cep": {
+    "val": null,
+    "index": 212,
+    "size": 8,
+    "type": "num",
+    "descr": "CEP do estabelecimento."
+  },
+  "estado": {
+    "val": null,
+    "index": 220,
+    "size": 2,
+    "type": "alfanum",
+    "descr": "Sigla do estado."
+  },
+  "brancos_e": {
+    "val": "",
+    "index": 222,
+    "size": 8,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "ocorrencias": {
+    "val": "",
+    "index": 230,
+    "size": 10,
+    "type": "alfanum",
+    "descr": "Códigos de ocorrências para retorno."
+  }
+}
