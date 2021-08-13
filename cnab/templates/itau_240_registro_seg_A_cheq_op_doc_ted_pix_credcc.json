@@ -1,0 +1,205 @@
+{
+  "codigo_banco" : {
+    "val": 341,
+    "index": 0,
+    "size": 3,
+    "type": "num",
+    "descr": "Código do banco na compensação."
+  },
+  "codigo_lote": {
+    "val": null,
+    "index": 3,
+    "size": 4,
+    "type": "num",
+    "descr": "Identificação do lote de pagamentos."
+  },
+  "tipo_registro": {
+    "val": 3,
+    "index": 7,
+    "size": 1,
+    "type": "num",
+    "descr": "Registro header de arquivo."
+  },
+  "numero_registro": {
+    "val": null,
+    "index": 8,
+    "size": 5,
+    "type": "num",
+    "descr": "Número sequencial do registro no lote."
+  },
+  "segmento": {
+    "val": "A",
+    "index": 13,
+    "size": 1,
+    "type": "alfanum",
+    "descr": "Código do segmento desse registro de detalhe."
+  },
+  "tipo_movimento": {
+    "val": null,
+    "index": 14,
+    "size": 3,
+    "type": "num",
+    "descr": "Timo de movimento."
+  },
+  "camara": {
+    "val": null,
+    "index": 17,
+    "size": 3,
+    "type": "num",
+    "descr": "Código da camara centralizada."
+  },
+  "banco_favor_codigo": {
+    "val": null,
+    "index": 20,
+    "size": 3,
+    "type": "num",
+    "descr": "Código do banco favorecido."
+  },
+  "agencia_conta": {
+    "val": null,
+    "index": 23,
+    "size": 20,
+    "type": "alfanum",
+    "descr": "Agência conta favorecido (que? ò_Ó )."
+  },
+  "nome_favorecido": {
+    "val": null,
+    "index": 43,
+    "size": 30,
+    "type": "alfanum",
+    "descr": "Nome do favorecido."
+  },
+  "seu_numero": {
+    "val": null,
+    "index": 73,
+    "size": 20,
+    "type": "alfanum",
+    "descr": "Número do documento atribuído pela empresa."
+  },
+  "data_pagamento": {
+    "val": "DDMMAAAA",
+    "index": 93,
+    "size": 8,
+    "type": "alfanum",
+    "descr": "Data prevista para pagamento."
+  },
+  "moeda_tipo": {
+    "val": "REA",
+    "index": 101,
+    "size": 3,
+    "type": "alfanum",
+    "descr": "Tipo da moeda. REA ou 009."
+  },
+  "codigo_ispb": {
+    "val": null,
+    "index": 104,
+    "size": 8,
+    "type": "alfanum",
+    "descr": "Identificação da instituição para o SPB."
+  },
+  "identi_transfer": {
+    "val": null,
+    "index": 112,
+    "size": 2,
+    "type": "alfanum",
+    "descr": "Conta de pagamento / PIX."
+  },
+  "zeros": {
+    "val": 0,
+    "index": 114,
+    "size": 5,
+    "type": "num",
+    "descr": "Complemento de registro."
+  },
+  "valor_pagamento": {
+    "val": null,
+    "index": 119,
+    "size": 15,
+    "type": "num",
+    "descr": "Valor previsto no pagamento. Em centavos, sem vírgula."
+  },
+  "nosso_numero": {
+    "val": null,
+    "index": 134,
+    "size": 15,
+    "type": "alfanum",
+    "descr": "Número do documento atribuído pelo banco."
+  },
+  "brancos_a": {
+    "val": "",
+    "index": 149,
+    "size": 5,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "data_efetiva": {
+    "val": "DDMMAAAA",
+    "index": 154,
+    "size": 8,
+    "type": "alfanum",
+    "descr": "Data real de efetivação do pagamento."
+  },
+  "valor_efetivo": {
+    "val": null,
+    "index": 162,
+    "size": 15,
+    "type": "num",
+    "descr": "Valor real da efetivação do pagamento. Em centavos, sem vírgula."
+  },
+  "finalidade_detalhe": {
+    "val": "",
+    "index": 177,
+    "size": 20,
+    "type": "alfanum",
+    "descr": "Informação complementar para histórico de conta corrente."
+  },
+  "numero_documento": {
+    "val": null,
+    "index": 197,
+    "size": 6,
+    "type": "num",
+    "descr": "Número no DOC/TED/OP/CHEQUE no retorno."
+  },
+  "numero_inscricao": {
+    "val": null,
+    "index": 203,
+    "size": 14,
+    "type": "num",
+    "descr": "Número de inscrição do favorecido, CPF ou CNPJ."
+  },
+  "finalidade_doc": {
+    "val": null,
+    "index": 217,
+    "size": 2,
+    "type": "alfanum",
+    "descr": "Finalidade do DOC e status do funcionário na empresa."
+  },
+  "finalidade_ted": {
+    "val": null,
+    "index": 219,
+    "size": 5,
+    "type": "alfanum",
+    "descr": "Finalidade da TED."
+  },
+  "brancos_b": {
+    "val": "",
+    "index": 224,
+    "size": 5,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "aviso": {
+    "val": "",
+    "index": 229,
+    "size": 1,
+    "type": "alfanum",
+    "descr": "Aviso ao favorecido."
+  },
+  "ocorrencias": {
+    "val": "",
+    "index": 230,
+    "size": 10,
+    "type": "alfanum",
+    "descr": "Códigos de ocorrências para retorno."
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "codigo_banco" : {
+    "val": 341,
+    "index": 0,
+    "size": 3,
+    "type": "num",
+    "descr": "Código do banco na compensação."
+  },
+  "codigo_lote": {
+    "val": 0,
+    "index": 3,
+    "size": 4,
+    "type": "num",
+    "descr": "Lote de serviço."
+  },
+  "tipo_registro": {
+    "val": 0,
+    "index": 7,
+    "size": 1,
+    "type": "num",
+    "descr": "Registro header de arquivo."
+  },
+  "brancos_a": {
+    "val": "",
+    "index": 8,
+    "size": 6,
+    "type": "alfanum",
+    "descr": "Complemento de registro. Em branco."
+  },
+  "layout_de_arquivo": {
+    "val": 80,
+    "index": 14,
+    "size": 3,
+    "type": "num",
+    "descr": "Número da versão do layout do arquivo."
+  },
+  "empresa_inscricao": {
+    "val": null,
+    "index": 17,
+    "size": 1,
+    "type": "num",
+    "descr": "Tipo de inscrição da empresa. É 1 para CPF ou 2 para CNPJ."
+  },
+  "inscricao_numero": {
+    "val": null,
+    "index": 18,
+    "size": 14,
+    "type": "num",
+    "descr": "CNPJ da empresa debitada."
+  },
+  "brancos_b": {
+    "val": "",
+    "index": 32,
+    "size": 20,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "agencia": {
+    "val": null,
+    "index": 52,
+    "size": 5,
+    "type": "num",
+    "descr": "Número da agência debitada."
+  },
+  "brancos_c": {
+    "val": "",
+    "index": 57,
+    "size": 1,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "conta": {
+    "val": null,
+    "index": 58,
+    "size": 12,
+    "type": "num",
+    "descr": "Número da conta corrente debitada."
+  },
+  "brancos_d": {
+    "val": "",
+    "index": 70,
+    "size": 1,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "dac": {
+    "val": null,
+    "index": 71,
+    "size": 1,
+    "type": "num",
+    "descr": "DAC da agência/conta debitada."
+  },
+  "nome_empresa": {
+    "val": null,
+    "index": 72,
+    "size": 30,
+    "type": "alfanum",
+    "descr": "Nome da empresa."
+  },
+  "nome_banco": {
+    "val": null,
+    "index": 102,
+    "size": 30,
+    "type": "alfanum",
+    "descr": "Nome do banco."
+  },
+  "brancos_e": {
+    "val": "",
+    "index": 132,
+    "size": 10,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "arquivo_codigo": {
+    "val": 1,
+    "index": 142,
+    "size": 1,
+    "type": "num",
+    "descr": "Código remessa/retorno, 1 para remessa ou 2 para retorno."
+  },
+  "data_geracao": {
+    "val": "DDMMAAAA",
+    "index": 143,
+    "size": 8,
+    "type": "num",
+    "descr": "Data da geração do arquivo."
+  },
+  "hora_geracao": {
+    "val": "HHMMSS",
+    "index": 151,
+    "size": 6,
+    "type": "num",
+    "descr": "Hora da geração do arquivo."
+  },
+  "zeros": {
+    "val": 0,
+    "index": 157,
+    "size": 9,
+    "type": "num",
+    "descr": "Complemento de registro."
+  },
+  "unidade_densidade": {
+    "val": 0,
+    "index": 166,
+    "size": 5,
+    "type": "num",
+    "descr": "Densidade de gravação do arquivo."
+  },
+  "brancos_f": {
+    "val": "",
+    "index": 171,
+    "size": 69,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  }
+}

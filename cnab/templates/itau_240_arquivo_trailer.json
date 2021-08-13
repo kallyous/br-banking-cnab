@@ -1,0 +1,51 @@
+{
+  "codigo_banco" : {
+    "val": 341,
+    "index": 0,
+    "size": 3,
+    "type": "num",
+    "descr": "Código do banco na compensação."
+  },
+  "codigo_lote": {
+    "val": 9999,
+    "index": 3,
+    "size": 4,
+    "type": "num",
+    "descr": "Lote de serviço."
+  },
+  "tipo_registro": {
+    "val": 9,
+    "index": 7,
+    "size": 1,
+    "type": "num",
+    "descr": "Registro trailer de arquivo."
+  },
+  "brancos_a": {
+    "val": "",
+    "index": 8,
+    "size": 9,
+    "type": "alfanum",
+    "descr": "Complemento de registro. Em branco."
+  },
+  "total_qtd_lotes": {
+    "val": 0,
+    "index": 17,
+    "size": 6,
+    "type": "num",
+    "descr": "Quantidade de lotes no arquivo."
+  },
+  "total_qtd_registros": {
+    "val": 0,
+    "index": 23,
+    "size": 6,
+    "type": "num",
+    "descr": "Quantidade de registros no arquivo."
+  },
+  "brancos_b": {
+    "val": "",
+    "index": 29,
+    "size": 211,
+    "type": "alfanum",
+    "descr": "Complemento de registro. Em branco."
+  }
+}
