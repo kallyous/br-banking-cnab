@@ -1,11 +1,11 @@
-from cnab.cnab240 import ArquivoCNAB240, LoteCNAB240, RegistroCNAB240, BatchType240, FileType240, RecordType240
+from cnab.cnab240 import ArquivoCNAB240, LoteCNAB240, RegistroCNAB240, BatchTemplate240, FileTemplate240, RecordTemplate240
 
 if __name__ == '__main__':
     print()
-    cnabfile = ArquivoCNAB240(FileType240.FileItau)
-    cnabbatch = LoteCNAB240(BatchType240.Itau_Cheq_OP_DOC_TED_PIX_CredCC)
-    cnabbatch.add(RegistroCNAB240(RecordType240.Itau_Cheq_OP_DOC_TED_PIX_CredCC))
-    cnabbatch.add(RegistroCNAB240(RecordType240.Itau_Cheq_OP_DOC_TED_PIX_CredCC))
+    cnabfile = ArquivoCNAB240(FileTemplate240.FileItau)
+    cnabbatch = LoteCNAB240(BatchTemplate240.Itau_Cheq_OP_DOC_TED_PIX_CredCC)
+    cnabbatch.add(RegistroCNAB240(RecordTemplate240.Itau_Cheq_OP_DOC_TED_PIX_CredCC))
+    cnabbatch.add(RegistroCNAB240(RecordTemplate240.Itau_Cheq_OP_DOC_TED_PIX_CredCC))
     cnabfile.add(cnabbatch)
     print(cnabfile)
 

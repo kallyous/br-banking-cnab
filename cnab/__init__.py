@@ -32,6 +32,17 @@ class CNABInvalidOperationError(Exception):
         super().__init__(self.message)
 
 
+class CNABInvalidTemplateError(Exception):
+    """Exceção lançada quando um nome inválido de template é usado na criação de um BlocoCNAB."""
+
+    def __init__(self, template_type, class_name, valid_templates):
+        self.message = f'\n\tO template \'{template_type}\' é inválido para \'{class_name}\'. Valores válidos são'
+        for value in valid_templates:
+            self.message += f' {value},'
+        self.message = self.message.rstrip(',') + ' .'
+        super().__init__(self.message)
+
+
 def bake_cnab_string(data, strict=False):
     """Navega template de bloco de dados CNAB e gera a string."""
 

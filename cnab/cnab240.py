@@ -1,10 +1,10 @@
 import os
 import enum
 
-from cnab import DATA_DIR, BlocoCNAB
+from cnab import DATA_DIR, BlocoCNAB, CNABInvalidTemplateError
 
 
-class FileType240(enum.Enum):
+class FileTemplate240(enum.Enum):
     """Enumera tipos válidos de Arquivo de Remessa CNAB 240 implementados.
 
     Exemplo de uso:
@@ -23,7 +23,7 @@ class FileType240(enum.Enum):
     FileItau = os.path.join(DATA_DIR, 'itau_240_arquivo_{0}.json')
 
 
-class BatchType240(enum.Enum):
+class BatchTemplate240(enum.Enum):
     """Templates de tipos de lotes CNAB 240 presentes e implementados.
 
     Exemplo de uso:
@@ -46,7 +46,7 @@ class BatchType240(enum.Enum):
     Itau_Boleto_PIXqrcode = None  # TODO: Lote de boletos será o próximo template. ;-)
 
 
-class RecordType240(enum.Enum):
+class RecordTemplate240(enum.Enum):
     """Templates de tipos de registro CNAB 240 presentes e implementados.
 
     Exemplo de uso:
@@ -61,47 +61,14 @@ class RecordType240(enum.Enum):
     Itau_Cheq_OP_DOC_TED_PIX_CredCC = os.path.join(DATA_DIR, 'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc.json')
 
 
-class CNAB240InvalidRecordTypeError(Exception):
-    """Exceção lançada quando um tipo inválido de registro é usado na criação de um registro."""
-
-    def __init__(self, record_type):
-        self.message = f'\n\tTipo de registro \'{record_type}\' é inválido. Valores possíveis são'
-        for value in RecordType240:
-            self.message += f' {value},'
-        self.message = self.message.rstrip(',') + ' .'
-        super().__init__(self.message)
-
-
-class CNAB240InvalidBatchTypeError(Exception):
-    """Exceção lançada quando um tipo inválido de lote é usado na criação de um lote de registros."""
-
-    def __init__(self, batch_type):
-        self.message = f'\n\tTipo de lote \'{batch_type}\' é inválido. Valores possíveis são'
-        for value in BatchType240:
-            self.message += f' {value},'
-        self.message = self.message.rstrip(',') + ' .'
-        super().__init__(self.message)
-
-
-class CNAB240InvalidFileTypeError(Exception):
-    """Exceção lançada quando um tipo inválido de arquivo é usado na criação de um arquivo de remessas."""
-
-    def __init__(self, file_type):
-        self.message = f'\n\tTipo de arquivo \'{file_type}\' é inválido. Valores possíveis são'
-        for value in FileType240:
-            self.message += f' {value},'
-        self.message = self.message.rstrip(',') + ' .'
-        super().__init__(self.message)
-
-
 class RegistroCNAB240(BlocoCNAB):
     """Define um registro de detalhes para uma transação que vai dentro de um lote CNAB 240."""
 
     def __init__(self, record_type):
 
         # Dispara erro se tipo de registro for inválido/não-implementado.
-        if record_type not in [item for item in RecordType240]:
-            raise CNAB240InvalidRecordTypeError(record_type)
+        if record_type not in [item for item in RecordTemplate240]:
+            raise CNABInvalidTemplateError(record_type, self.__class__.__name__, RecordTemplate240)
 
         # Chama construtor da superclasse, responsável por carregar template em content.
         super().__init__(record_type, enclosed=False)
@@ -113,8 +80,8 @@ class LoteCNAB240(BlocoCNAB):
     def __init__(self, batch_type):
 
         # Dispara erro se tipo de lote for inválido/não-implementado.
-        if batch_type not in [item for item in BatchType240]:
-            raise CNAB240InvalidBatchTypeError(batch_type)
+        if batch_type not in [item for item in BatchTemplate240]:
+            raise CNABInvalidTemplateError(batch_type, self.__class__.__name__, BatchTemplate240)
 
         # Chama construtor da superclasse, responsável por carregar header, trailer e preparar content = [].
         super().__init__(batch_type, enclosed=True)
@@ -126,8 +93,8 @@ class ArquivoCNAB240(BlocoCNAB):
     def __init__(self, file_type):
 
         # Dispara erro se tipo de arquivo for inválido/não-implementado.
-        if file_type not in [item for item in FileType240]:
-            raise CNAB240InvalidFileTypeError(file_type)
+        if file_type not in [item for item in FileTemplate240]:
+            raise CNABInvalidTemplateError(file_type, self.__class__.__name__, FileTemplate240)
 
         # Chama construtor da superclasse, responsável por carregar header, header e preparar content = [].
         super().__init__(file_type, enclosed=True)
