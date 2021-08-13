@@ -1,7 +1,7 @@
 import os
 import enum
 
-from cnab import DATA_DIR, BlocoCNAB, CNABInvalidTemplateError
+from brbankingcnab import DATA_DIR, BlocoCNAB, CNABInvalidTemplateError
 
 
 class FileTemplate240(enum.Enum):

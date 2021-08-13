@@ -34,8 +34,8 @@ Atualmente gerando apenas algumas modalidades de CNAB 240 do Itaú.
 **Exemplo:**
 
 ```python
-from cnab.cnab240 import ArquivoCNAB240, LoteCNAB240, RegistroCNAB240, \
-                         BatchTemplate240, FileTemplate240, RecordTemplate240
+from brbankingcnab.cnab240 import ArquivoCNAB240, LoteCNAB240, RegistroCNAB240,
+    BatchTemplate240, FileTemplate240, RecordTemplate240
 
 ...  # Qualquer coisa que vem antes da criação do CNAB.
 clientes = ...  # Lista de clientes aqui e pagamentos em clientes[i]['pagamentos'] .
@@ -45,24 +45,24 @@ arquivo_cnab.header['...'] = ...  # Altere o header no que for necessário.
 arquivo_cnab.trailer['...'] = ...  # Altere o trailer no que for necessário.
 
 for cliente in clientes:
-    
-    pagamentos_TED = ... # Pagametnos tipo TED.
+
+    pagamentos_TED = ...  # Pagametnos tipo TED.
     lote_ted = LoteCNAB240(BatchTemplate240.Itau_Cheq_OP_DOC_TED_PIX_CredCC)
     lote_ted.header['...'] = ...  # Altere o header no que for necessário.
     lote_ted.trailer['...'] = ...  # Altere o trailer no que for necessário.
-    
+
     for ted in pagamentos_TED:
         registro = RegistroCNAB240(RecordTemplate240.Itau_Cheq_OP_DOC_TED_PIX_CredCC)
         registro.content['...'] = ...  # Altere os campos que forem necessários.
         lote_ted.add(registro)
-    
+
     arquivo_cnab.add(lote_ted)
 
-    pagamentos_blt = ... # Pagametnos tipo boleto.
+    pagamentos_blt = ...  # Pagametnos tipo boleto.
     lote_blt = LoteCNAB240(BatchTemplate240.Itau_Cheq_OP_DOC_TED_PIX_CredCC)
     lote_blt.header['...'] = ...  # Altere o header no que for necessário.
     lote_blt.trailer['...'] = ...  # Altere o trailer no que for necessário.
-    
+
     for blt in pagamentos_blt:
         registro = RegistroCNAB240(RecordTemplate240.Itau_Boleto_PIXqrcode)
         registro.content['...'] = ...  # Altere os campos que forem necessários.
