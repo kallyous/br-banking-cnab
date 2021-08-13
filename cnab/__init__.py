@@ -120,9 +120,9 @@ class BlocoCNAB:
             # Concatena conteúdo do header do arquivo de remessa.
             data_str += bake_cnab_string(self.header, strict=strict)
 
-            # Passa por todos os lotes, e concatena.
-            for batch in self.content:
-                data_str += batch.make(strict=strict)
+            # Passa por todos os filhos, e concatena.
+            for child in self.content:
+                data_str += child.make(strict=strict)
 
             # Concatena conteúdo do trailer do arquivo de remessa.
             data_str += bake_cnab_string(self.trailer, strict=strict)
@@ -137,15 +137,22 @@ class BlocoCNAB:
     def add(self, entry):
         """Adiciona ao final de self.content se o bloco for do tipo [header ... trailer], senão gera erro."""
 
+        name = self.__class__.__name__
+
         # Se for um registro de detalhes ou similar, gera o erro.
         if not self.enclosed:
-            raise CNABInvalidOperationError(self.__class__.__name__, 'add(entry)',
-                                            'Este método é aplicável apenas para blocos que possuem header e trailer, '
+            raise CNABInvalidOperationError(name, 'add(entry)',
+                                            'Este método é aplicável apenas a blocos que possuem header e trailer, '
                                             'para adicionar filhos ao seu conteúdo.')
 
         # Caso contrário, damos o .append() em self.content.
         else:
             self.content.append(entry)
+            self.trailer['total_qtd_entradas'] += 1
+
+        print(f'ATENÇÃO: Se você está lendo isso, o método {name}.add(entry) não foi sobrescrito. Isto não é um erro, '
+              f'mas os valores das entradas de {name} não serão atualizados automaticamente. Você deve atualiza-los '
+              f'explicitamente até esta funcionalidade ser adicionada em uma atualização futura.')
 
     def __str__(self):
         """Visualizar conteúdo, tolerando valores ausentes."""

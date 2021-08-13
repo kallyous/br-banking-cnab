@@ -28,7 +28,7 @@
     "descr": "Complemento de registro. Em branco."
   },
   "total_qtd_lotes": {
-    "val": 1,
+    "val": 0,
     "index": 17,
     "size": 6,
     "type": "num",
