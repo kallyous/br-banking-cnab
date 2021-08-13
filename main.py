@@ -3,9 +3,9 @@ from cnab.cnab240 import ArquivoCNAB240, LoteCNAB240, RegistroCNAB240, BatchType
 if __name__ == '__main__':
     print()
     cnabfile = ArquivoCNAB240(FileType240.FileItau)
-    cnabbatch = LoteCNAB240(BatchType240.Cheq_OP_DOC_TED_PIX_CredCC)
-    cnabbatch.add(RegistroCNAB240(RecordType240.Cheq_OP_DOC_TED_PIX_CredCC))
-    cnabbatch.add(RegistroCNAB240(RecordType240.Cheq_OP_DOC_TED_PIX_CredCC))
+    cnabbatch = LoteCNAB240(BatchType240.Itau_Cheq_OP_DOC_TED_PIX_CredCC)
+    cnabbatch.add(RegistroCNAB240(RecordType240.Itau_Cheq_OP_DOC_TED_PIX_CredCC))
+    cnabbatch.add(RegistroCNAB240(RecordType240.Itau_Cheq_OP_DOC_TED_PIX_CredCC))
     cnabfile.add(cnabbatch)
     print(cnabfile)
 

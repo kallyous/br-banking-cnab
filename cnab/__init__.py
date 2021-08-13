@@ -1,9 +1,17 @@
+"""Br Banking CNAB - Package for generating Brazilian CNAB banking files as specified by FEBRABAN.
+
+At the current development, only implements a few templates blocks for Itaú bank.
+"""
+
+__version__ = '0.1dev'
+__author__ = 'Lucas Carvalho Flores'
+
 import json
 import os
 from collections import OrderedDict
 
 CWD = os.path.abspath(os.path.dirname(__file__))
-DATA_DIR = os.path.join(CWD, 'data')
+DATA_DIR = os.path.join(CWD, 'templates')
 
 
 class CNABInvalidValueError(Exception):
@@ -16,7 +24,7 @@ class CNABInvalidValueError(Exception):
 
 
 class CNABInvalidOperationError(Exception):
-    """Exceção laançada quando uma operação não suportada por certa classe é chamada."""
+    """Exceção lançada quando uma operação não suportada por certa classe é chamada."""
 
     def __init__(self, class_name, method_name, extra_msg='',
                  message='\n\tA classe {0} não suporta o método {1}. {2}'):
@@ -69,18 +77,18 @@ class BlocoCNAB:
     def __init__(self, block_type, enclosed):
         self.enclosed = enclosed
 
-        # Se não for do tipo [header ... footer], não se edita o nome do arquivo a ser carregado pois só há um.
+        # Se não for do tipo [header ... trailer], não se edita o nome do arquivo a ser carregado pois só há um.
         if not enclosed:
             with open(block_type.value, 'r') as file:
                 self.content = json.load(file, object_pairs_hook=OrderedDict)
 
-        # Blocos do tipo [header ... footer] ajustam o nome pra carregar as duas partes.
+        # Blocos do tipo [header ... trailer] ajustam o nome pra carregar as duas partes, header e trailer.
         else:
-            # Carrega template do cabeçalho do lote.
+            # Carrega template do header do lote.
             with open(block_type.value.format('header'), 'r') as file:
                 self.header = json.load(file, object_pairs_hook=OrderedDict)
 
-            # Carrega template do rodapé do lote.
+            # Carrega template do trailer do lote.
             with open(block_type.value.format('trailer'), 'r') as file:
                 self.trailer = json.load(file, object_pairs_hook=OrderedDict)
 
@@ -88,6 +96,9 @@ class BlocoCNAB:
             self.content = []
 
     def make(self, strict=True):
+        """Gera string com os dados formatados.
+        Se strict == True, campos vazios não são tolerados e geram erros.
+        """
 
         # Se for do tipo [header ... trailer]
         if self.enclosed:
@@ -95,7 +106,7 @@ class BlocoCNAB:
             # String a receber conteúdo final.
             data_str = ''
 
-            # Concatena conteúdo do cabeçalho do arquivo de remessa.
+            # Concatena conteúdo do header do arquivo de remessa.
             data_str += bake_cnab_string(self.header, strict=strict)
 
             # Passa por todos os lotes, e concatena.
@@ -105,7 +116,7 @@ class BlocoCNAB:
             # Concatena conteúdo do trailer do arquivo de remessa.
             data_str += bake_cnab_string(self.trailer, strict=strict)
 
-        # Senão é do tipo registro único.
+        # Senão, é do tipo registro único. Gera a string e pronto.
         else:
             data_str = bake_cnab_string(self.content, strict=strict)
 
@@ -113,12 +124,18 @@ class BlocoCNAB:
         return data_str
 
     def add(self, entry):
+        """Adiciona ao final de self.content se o bloco for do tipo [header ... trailer], senão gera erro."""
+
+        # Se for um registro de detalhes ou similar, gera o erro.
         if not self.enclosed:
             raise CNABInvalidOperationError(self.__class__.__name__, 'add(entry)',
                                             'Este método é aplicável apenas para blocos que possuem header e trailer, '
                                             'para adicionar filhos ao seu conteúdo.')
+
+        # Caso contrário, damos o .append() em self.content.
         else:
             self.content.append(entry)
 
     def __str__(self):
-        return self.make(strict=False)
+        """Visualizar conteúdo, tolerando valores ausentes."""
+        return 'Conteúdo do CNAB:\n' + self.make(strict=False) + '\nPara gerar o CNAB usável, use o método make() .'
