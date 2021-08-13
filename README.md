@@ -5,7 +5,7 @@ Atualmente gerando apenas algumas modalidades de CNAB 240 do Itaú.
 
 ---
 
-###Visão Geral
+### Visão Geral
 
 * `ArquivoCNAB240` - **Classe**: Define um arquivo de remessa, que pode conter diversos lotes de operações bancárias. É necessário especificar um template de arquivo de remessa na criação.
 * `FileTemplate240` - **Enum**: Define os templates de arquivos de remessa prontos.
@@ -16,7 +16,7 @@ Atualmente gerando apenas algumas modalidades de CNAB 240 do Itaú.
 
 ---
 
-###Uso
+### Uso
 
 **Como gerar um CNAB em 10 passos:**
 
@@ -77,7 +77,7 @@ final_cnab_string = arquivo_cnab.make()
 
 ---
 
-###Templates, Visualização e Saída
+### Templates, Visualização e Saída
 
 Os templates são JSONs e estão em cnab/templates. Eles não são apenas para uso interno da lib, mas possúem documentação de todos os campos dos blocos CNAB implementados. Na dúvida, consulte o JSON do template que for usar.
 
