@@ -148,7 +148,6 @@ class BlocoCNAB:
         # Caso contrário, damos o .append() em self.content.
         else:
             self.content.append(entry)
-            self.trailer['total_qtd_entradas'] += 1
 
         print(f'ATENÇÃO: Se você está lendo isso, o método {name}.add(entry) não foi sobrescrito. Isto não é um erro, '
               f'mas os valores das entradas de {name} não serão atualizados automaticamente. Você deve atualiza-los '

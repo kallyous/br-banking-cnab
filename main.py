@@ -7,6 +7,7 @@ if __name__ == '__main__':
     cnabbatch.add(RegistroCNAB240(RecordTemplate240.Itau_Cheq_OP_DOC_TED_PIX_CredCC))
     cnabbatch.add(RegistroCNAB240(RecordTemplate240.Itau_Cheq_OP_DOC_TED_PIX_CredCC))
     cnabfile.add(cnabbatch)
+    print()
     print(cnabfile)
 
     # RegistroCNAB240(RecordType240.Cheq_OP_DOC_TED_PIX_CredCC).add('asd')

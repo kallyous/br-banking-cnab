@@ -76,3 +76,13 @@ final_cnab_string = arquivo_cnab.make()
 ```
 
 ---
+
+###Templates, Visualização e Saída
+
+Os templates são JSONs e estão em cnab/templates. Eles não são apenas para uso interno da lib, mas possúem documentação de todos os campos dos blocos CNAB implementados. Na dúvida, consulte o JSON do template que for usar.
+
+Campos com valor inicial `null` nos JSON dos templates são necessários e não possúem valor default válido.
+
+Se precisar visualizar o estado do CNAB sendo montado, basta dar um `print(cnab)`. Isso é válido para qualquer bloco CNAB. Campos com valor ausente serão preenchidos com `?`.
+
+Ao chamar o método `make()` de qualquer bloco CNAB, se houver algum campo vazio ou com valor inválido, ocorrerá um erro do tipo `CNABInvalidValueError`. 
