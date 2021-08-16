@@ -76,7 +76,7 @@ def bake_cnab_string(data, strict=False):
 
         data_str += val
 
-    return data_str
+    return data_str + '\n'
 
 
 class BlocoCNAB:
