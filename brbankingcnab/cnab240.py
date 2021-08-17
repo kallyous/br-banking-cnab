@@ -97,7 +97,7 @@ class LoteCNAB240(BlocoCNAB):
         # Dispara erro se header ou trailer estiver faltando.
         if not self.header or not self.trailer:
             raise CNABInvalidOperationError(
-                class_name=self.__class__.__name__, method_name='add(lote)', extra_msg= \
+                class_name=self.__class__.__name__, method_name='add(lote)', message= \
                     'O header de arquivo deve ser iniciado com um template antes de adicionar lotes de registros.')
 
         # Atualiza 'numero_registro' do registro e o adiciona ao lote.
@@ -170,7 +170,7 @@ class ArquivoCNAB240(BlocoCNAB):
     def add(self, batch):
         if not self.header or not self.trailer:
             raise CNABInvalidOperationError(
-                class_name=self.__class__.__name__, method_name='add(lote)', extra_msg= \
+                class_name=self.__class__.__name__, method_name='add(lote)', message= \
                     'O header de arquivo deve ser iniciado com um template antes de adicionar lotes de registros.')
 
         # Incrementa contagem de lotes no arquivo.

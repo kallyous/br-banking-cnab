@@ -33,9 +33,8 @@ class CNABInvalidValueError(CNABError):
 class CNABInvalidOperationError(CNABError):
     """Exceção lançada quando uma operação não suportada por certa classe é chamada."""
 
-    def __init__(self, class_name, method_name, extra_msg='',
-                 message='\n\tA classe {0} não suporta o método {1}. {2}'):
-        super().__init__(message.format(class_name, method_name, extra_msg))
+    def __init__(self, class_name, method_name, message='\n\tA classe {0} não suporta o método {1}. {2}'):
+        super().__init__(message.format(class_name, method_name, message))
 
 
 class CNABInvalidTemplateError(CNABError):
