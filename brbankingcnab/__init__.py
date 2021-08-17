@@ -3,7 +3,7 @@
 At the current development, only implements a few templates blocks for Itaú bank.
 """
 
-__version__ = '0.2.0-dev.1'
+__version__ = '0.2.0-dev.2'
 __author__ = 'Lucas Carvalho Flores'
 
 import json
