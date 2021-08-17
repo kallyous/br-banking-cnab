@@ -133,18 +133,18 @@
     "descr": "Complemento de registro."
   },
   "data_efetiva": {
-    "val": "DDMMAAAA",
+    "val": "",
     "index": 154,
     "size": 8,
     "type": "alfanum",
-    "descr": "Data real de efetivação do pagamento."
+    "descr": "Data real de efetivação do pagamento. Retornado no CNAB do banco."
   },
   "valor_efetivo": {
-    "val": null,
+    "val": 0,
     "index": 162,
     "size": 15,
     "type": "num",
-    "descr": "Valor real da efetivação do pagamento. Em centavos, sem vírgula."
+    "descr": "Valor real da efetivação do pagamento. Em centavos, sem vírgula. Retornado no CNAB do banco."
   },
   "finalidade_detalhe": {
     "val": "",
@@ -154,11 +154,11 @@
     "descr": "Informação complementar para histórico de conta corrente."
   },
   "numero_documento": {
-    "val": null,
+    "val": 0,
     "index": 197,
     "size": 6,
     "type": "num",
-    "descr": "Número no DOC/TED/OP/CHEQUE no retorno."
+    "descr": "Número no DOC/TED/OP/CHEQUE no retorno. Retornado no CNAB do banco."
   },
   "numero_inscricao": {
     "val": null,
@@ -189,7 +189,7 @@
     "descr": "Complemento de registro."
   },
   "aviso": {
-    "val": "",
+    "val": "0",
     "index": 229,
     "size": 1,
     "type": "alfanum",

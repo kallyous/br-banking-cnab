@@ -14,33 +14,38 @@ CWD = os.path.abspath(os.path.dirname(__file__))
 DATA_DIR = os.path.join(CWD, 'templates')
 
 
-class CNABInvalidValueError(Exception):
+class CNABError(Exception):
+    """Exceção base dos erros de CNAB."""
+
+    def __init__(self, message=None):
+        self.message = message
+        super().__init__(self.message)
+
+
+class CNABInvalidValueError(CNABError):
     """Exceção lançada quando um valor inválido para certo campo é alcançado."""
 
     def __init__(self, field, value, message='\n\tValor do campo \'{0}\' não pode ser \'{1}\'. '
                                              'Verifique se há algum default pra usar ou defina um valor adequado.'):
-        self.message = message.format(field, value)
-        super().__init__(self.message)
+        super().__init__(message.format(field, value))
 
 
-class CNABInvalidOperationError(Exception):
+class CNABInvalidOperationError(CNABError):
     """Exceção lançada quando uma operação não suportada por certa classe é chamada."""
 
     def __init__(self, class_name, method_name, extra_msg='',
                  message='\n\tA classe {0} não suporta o método {1}. {2}'):
-        self.message = message.format(class_name, method_name, extra_msg)
-        super().__init__(self.message)
+        super().__init__(message.format(class_name, method_name, extra_msg))
 
 
-class CNABInvalidTemplateError(Exception):
+class CNABInvalidTemplateError(CNABError):
     """Exceção lançada quando um nome inválido de template é usado na criação de um BlocoCNAB."""
 
     def __init__(self, template_type, class_name, valid_templates):
-        self.message = f'\n\tO template \'{template_type}\' é inválido para \'{class_name}\'. Valores válidos são'
+        msg = f'\n\tO template \'{template_type}\' é inválido para \'{class_name}\'. Valores válidos são'
         for value in valid_templates:
-            self.message += f' {value},'
-        self.message = self.message.rstrip(',') + ' .'
-        super().__init__(self.message)
+            msg += f' {value},'
+        super().__init__(msg.rstrip(',') + ' .')
 
 
 def bake_cnab_string(data, strict=False):
@@ -72,7 +77,7 @@ def bake_cnab_string(data, strict=False):
             if val_type == 'num':
                 val = '0' * (size - len(val)) + str(val)
             else:
-                val = ' ' * (size - len(val)) + val
+                val += ' ' * (size - len(val))
 
         data_str += val
 
@@ -84,9 +89,11 @@ class BlocoCNAB:
     content = None
     trailer = None
     enclosed = None
+    template = 'Desconhecido'
 
     def __init__(self, block_type, enclosed):
         self.enclosed = enclosed
+        self.template = block_type.value
 
         # Se não for do tipo [header ... trailer], não se edita o nome do arquivo a ser carregado pois só há um.
         if not enclosed:
