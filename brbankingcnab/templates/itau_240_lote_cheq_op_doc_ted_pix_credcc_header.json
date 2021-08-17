@@ -69,7 +69,7 @@
     "type": "num",
     "descr": "CNPJ da empresa debitada."
   },
-  "identif_lancamen": {
+  "identific_lancamento": {
     "val": null,
     "index": 32,
     "size": 4,

@@ -28,14 +28,14 @@
     "descr": "Complemento de registro."
   },
   "total_qtd_registros": {
-    "val": null,
+    "val": 0,
     "index": 17,
     "size": 6,
     "type": "num",
     "descr": "Quantidade de registros do lote."
   },
   "total_valor_pagtos": {
-    "val": null,
+    "val": 0,
     "index": 23,
     "size": 18,
     "type": "num",
