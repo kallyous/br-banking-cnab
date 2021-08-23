@@ -1,0 +1,128 @@
+{
+  "codigo_banco" : {
+    "val": 341,
+    "index": 0,
+    "size": 3,
+    "type": "num",
+    "descr": "Código do banco na compensação."
+  },
+  "codigo_lote": {
+    "val": null,
+    "index": 3,
+    "size": 4,
+    "type": "num",
+    "descr": "Identificação do lote de pagamentos."
+  },
+  "tipo_registro": {
+    "val": 3,
+    "index": 7,
+    "size": 1,
+    "type": "num",
+    "descr": "Registro header de arquivo."
+  },
+  "numero_registro": {
+    "val": null,
+    "index": 8,
+    "size": 5,
+    "type": "num",
+    "descr": "Número sequencial do registro no lote."
+  },
+  "segmento": {
+    "val": "B",
+    "index": 13,
+    "size": 1,
+    "type": "alfanum",
+    "descr": "Código do segmento desse registro de detalhe."
+  },
+  "brancos_a": {
+    "val": "",
+    "index": 14,
+    "size": 3,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "empresa_inscricao": {
+    "val": null,
+    "index": 17,
+    "size": 1,
+    "type": "num",
+    "descr": "Tipo de inscrição da empresa. É 1 para CPF ou 2 para CNPJ."
+  },
+  "inscricao_numero": {
+    "val": null,
+    "index": 18,
+    "size": 14,
+    "type": "num",
+    "descr": "CNPJ da empresa debitada."
+  },
+  "endereco": {
+    "val": "ENDERECO",
+    "index": 32,
+    "size": 30,
+    "type": "alfanum",
+    "descr": "Nova da rua, av, pça, etc."
+  },
+  "numero_ender": {
+    "val": "",
+    "index": 62,
+    "size": 5,
+    "type": "num",
+    "descr": "Número do local."
+  },
+  "complemento": {
+    "val": "COMPLEMENTO",
+    "index": 67,
+    "size": 15,
+    "type": "alfanum",
+    "descr": "Casa, apt, etc."
+  },
+  "bairro": {
+    "val": "BAIRRO",
+    "index": 82,
+    "size": 15,
+    "type": "alfanum",
+    "descr": "Bairro do endereço."
+  },
+  "cidade": {
+    "val": "CIDADE",
+    "index": 97,
+    "size": 20,
+    "type": "alfanum",
+    "descr": "Cidade do endereço."
+  },
+  "cep": {
+    "val": 0,
+    "index": 117,
+    "size": 8,
+    "type": "num",
+    "descr": "CEP do endereço."
+  },
+  "estado": {
+    "val": "",
+    "index": 125,
+    "size": 2,
+    "type": "alfanum",
+    "descr": "Sigla do estado."
+  },
+  "email": {
+    "val": null,
+    "index": 127,
+    "size": 100,
+    "type": "alfanum",
+    "descr": "Email (de quem?)."
+  },
+  "brancos_b": {
+    "val": "",
+    "index": 227,
+    "size": 3,
+    "type": "alfanum",
+    "descr": "Complemento de registro."
+  },
+  "ocorrencias": {
+    "val": "",
+    "index": 230,
+    "size": 10,
+    "type": "alfanum",
+    "descr": "Códigos de ocorrências para retorno."
+  }
+}
