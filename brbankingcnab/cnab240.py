@@ -66,7 +66,13 @@ class RecordTemplate240(enum.Enum):
         """
 
     # Registro de seguimento A tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente.
-    Itau_Cheq_OP_DOC_TED_PIX_CredCC = os.path.join(DATA_DIR, 'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc.json')
+    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC = os.path.join(DATA_DIR,
+                                                        'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc.json')
+
+    # Registro de seguimento B tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente.
+    Itau_SegB_Cheq_OP_DOC_TED_CredCC = os.path.join(DATA_DIR,
+                                                        'itau_240_registro_seg_B_cheq_op_doc_ted_credcc.json')
+
 
 
 class RegistroCNAB240(BlocoCNAB):
@@ -136,10 +142,12 @@ class LoteCNAB240(BlocoCNAB):
         try:
             self.trailer['total_valor_pagtos']['val'] += record.content['valor_pagamento']['val']
         except KeyError:
-            raise CNAB240KeyError(class_name=self.__class__.__name__, method_name='add(lote)',
+            pass
+            # TODO: Criar uma forma de diferenciar os templates que DEVEM ter esse campo e portanto devem lançar erro.
+            """raise CNAB240KeyError(class_name=self.__class__.__name__, method_name='add(lote)',
                                   template_name=self.template,
                                   field_name='total_valor_pagtos',
-                                  message=f'O campo não foi encontrado no trailer de arquivo.')
+                                  message=f'O campo não foi encontrado no trailer de arquivo.')"""
         except TypeError as e:
             print(f'ERRO: No template {self.template} o campo total_valor_pagtos está com valor inicial'
                   f' diferente de 0 (zero)!!!')
