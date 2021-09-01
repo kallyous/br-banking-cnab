@@ -77,6 +77,8 @@ def bake_cnab_string(data, strict=False):
                 val = '0' * (size - len(val)) + str(val)
             else:
                 val += ' ' * (size - len(val))
+        elif len(val) > size:
+            val = val[0:size]
 
         data_str += val
 
