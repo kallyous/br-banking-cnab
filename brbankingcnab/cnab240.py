@@ -3,6 +3,8 @@ import enum
 
 from brbankingcnab import DATA_DIR, BlocoCNAB, CNABError, CNABInvalidTemplateError, CNABInvalidOperationError
 
+SEGMENTO_A = 'A'  # Código do seguimento A.
+
 
 class CNAB240KeyError(CNABError):
     """Erro para campos inválidos ou ausentes no template de CNABs 240 ou durante a sua leitura e validação."""
@@ -74,7 +76,6 @@ class RecordTemplate240(enum.Enum):
                                                         'itau_240_registro_seg_B_cheq_op_doc_ted_credcc.json')
 
 
-
 class RegistroCNAB240(BlocoCNAB):
     """Define um registro de detalhes para uma transação que vai dentro de um lote CNAB 240."""
 
@@ -98,33 +99,13 @@ class LoteCNAB240(BlocoCNAB):
         # Chama construtor da superclasse, responsável por carregar header, trailer e preparar content = [].
         super().__init__(batch_type, enclosed=True)
 
-    def add(self, record):
-
-        # Dispara erro se header ou trailer estiver faltando.
-        if not self.header or not self.trailer:
-            raise CNABInvalidOperationError(
-                class_name=self.__class__.__name__, method_name='add(lote)', extra= \
-                    'O header de arquivo deve ser iniciado com um template antes de adicionar lotes de registros.')
-
-        # Atualiza 'numero_registro' do registro e o adiciona ao lote.
+    def update_record_count(self):
+        num = 0
         try:
-            record.content['numero_registro']['val'] = len(self.content) + 1  # Começa em 1 (não em zero).
-        except KeyError:
-            raise CNAB240KeyError(class_name=record.__class__.__name__, method_name='add(lote)',
-                                  template_name=record.template,
-                                  field_name='numero_registro',
-                                  message=f'O campo não foi encontrado no template do registro.')
-        except TypeError as e:
-            print(f'ERRO: No template {record.template}, o campo numero_registro está com valor inicial diferente'
-                  f' de 0 (zero)!!!')
-            print(f'O erro ocorreu em {self.__class__.__name__} durante a adição de um registro ao lote, causando uma'
-                  f' adição de None + Int. '
-                  f'Corrija o valor inicial de numero_registro para 0 (zero inteiro) nesse template.')
-            raise e
-
-        # Incrementa contagem de lotes no arquivo.
-        try:
-            self.trailer['total_qtd_registros']['val'] += 1
+            for record in self.content:
+                if record.content['segmento']['val'] == SEGMENTO_A:
+                    num += 1
+            self.trailer['total_qtd_registros']['val'] = num
         except KeyError:
             raise CNAB240KeyError(class_name=self.__class__.__name__, method_name='add(lote)',
                                   template_name=self.template,
@@ -138,29 +119,60 @@ class LoteCNAB240(BlocoCNAB):
                   f'Corrija o valor inicial de total_qtd_registros para 0 (zero inteiro) no trailer desse template.')
             raise e
 
-        # Incrementa valor total dos pagamentos do lote.
+    def update_total_payment_value(self):
+        total_payment_value = 0
+        for record in self.content:
+            if record.content['segmento']['val'] == SEGMENTO_A:
+                try:
+                    total_payment_value += record.content['valor_pagamento']['val']
+                except KeyError:
+                    raise CNAB240KeyError(class_name=record.__class__.__name__, method_name='LoteCNAB240.update_total_payment_value()',
+                                          template_name=self.template,
+                                          field_name="RegistroCNAB240.content['valor_pagamento']['val']",
+                                          message=f'O campo não foi encontrado no registros.')
+        self.trailer['total_valor_pagtos']['val'] = total_payment_value
+
+    def get_record_count(self):
+        return self.trailer['total_qtd_registros']['val']
+
+    def add(self, record):
+
+        # Dispara erro se header ou trailer estiver faltando.
+        if not self.header or not self.trailer:
+            raise CNABInvalidOperationError(
+                class_name=self.__class__.__name__, method_name='add(lote)', extra= \
+                    'O header de arquivo deve ser iniciado com um template antes de adicionar lotes de registros.')
+
+        # Atualiza 'numero_registro' do registro e o adiciona ao lote.
         try:
-            self.trailer['total_valor_pagtos']['val'] += record.content['valor_pagamento']['val']
+            if record.content['segmento']['val'] == SEGMENTO_A:
+                record.content['numero_registro']['val'] = self.get_record_count() + 1
+            else:
+                record.content['numero_registro']['val'] = self.get_record_count()
         except KeyError:
-            pass
-            # TODO: Criar uma forma de diferenciar os templates que DEVEM ter esse campo e portanto devem lançar erro.
-            """raise CNAB240KeyError(class_name=self.__class__.__name__, method_name='add(lote)',
-                                  template_name=self.template,
-                                  field_name='total_valor_pagtos',
-                                  message=f'O campo não foi encontrado no trailer de arquivo.')"""
+            raise CNAB240KeyError(class_name=record.__class__.__name__, method_name='add(lote)',
+                                  template_name=record.template,
+                                  field_name='numero_registro',
+                                  message=f'O campo não foi encontrado no template do registro.')
         except TypeError as e:
-            print(f'ERRO: No template {self.template} o campo total_valor_pagtos está com valor inicial'
-                  f' diferente de 0 (zero)!!!')
+            print(f'ERRO: No template {record.template}, o campo numero_registro está com valor inicial diferente'
+                  f' de 0 (zero)!!!')
             print(f'O erro ocorreu em {self.__class__.__name__} durante a adição de um registro ao lote, causando uma'
                   f' adição de None + Int. '
-                  f'Corrija o valor inicial de total_valor_pagtos para 0 (zero inteiro) no trailer desse template.')
+                  f'Corrija o valor inicial de numero_registro para 0 (zero inteiro) nesse template.')
             raise e
+
+        # Incrementa valor total dos pagamentos do lote.
+        self.update_total_payment_value()
 
         # Código de lote de cada registro é o do lote a que pertemcem.
         record.content['codigo_lote']['val'] = self.header['codigo_lote']['val']
 
         # Adiciona registro ao lote.
         self.content.append(record)
+
+        # Incrementa contagem de lotes no arquivo.
+        self.update_record_count()
 
 
 class ArquivoCNAB240(BlocoCNAB):
@@ -174,6 +186,12 @@ class ArquivoCNAB240(BlocoCNAB):
 
         # Chama construtor da superclasse, responsável por carregar header, header e preparar content = [].
         super().__init__(file_type, enclosed=True)
+
+    def update_total_records(self):
+        total_records = 0
+        for batch in self.content:
+            total_records += batch.get_record_count()
+        self.trailer['total_qtd_registros']['val'] = total_records
 
     def add(self, batch):
         if not self.header or not self.trailer:
@@ -229,3 +247,6 @@ class ArquivoCNAB240(BlocoCNAB):
 
         # Adiciona lote ao arquivo.
         self.content.append(batch)
+
+        # Atualiza contagem de registros dos lotes.
+        self.update_total_records()
