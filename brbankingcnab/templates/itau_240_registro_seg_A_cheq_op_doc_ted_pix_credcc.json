@@ -59,7 +59,7 @@
     "val": null,
     "index": 23,
     "size": 20,
-    "type": "alfanum",
+    "type": "num",
     "descr": "Agência conta favorecido (que? ò_Ó )."
   },
   "nome_favorecido": {
@@ -98,7 +98,7 @@
     "descr": "Identificação da instituição para o SPB."
   },
   "identi_transfer": {
-    "val": null,
+    "val": "01",
     "index": 112,
     "size": 2,
     "type": "alfanum",
@@ -133,10 +133,10 @@
     "descr": "Complemento de registro."
   },
   "data_efetiva": {
-    "val": "",
+    "val": 0,
     "index": 154,
     "size": 8,
-    "type": "alfanum",
+    "type": "num",
     "descr": "Data real de efetivação do pagamento. Retornado no CNAB do banco."
   },
   "valor_efetivo": {
@@ -154,10 +154,10 @@
     "descr": "Informação complementar para histórico de conta corrente."
   },
   "numero_documento": {
-    "val": 0,
+    "val": "",
     "index": 197,
     "size": 6,
-    "type": "num",
+    "type": "alfanum",
     "descr": "Número no DOC/TED/OP/CHEQUE no retorno. Retornado no CNAB do banco."
   },
   "numero_inscricao": {
@@ -178,7 +178,7 @@
     "val": null,
     "index": 219,
     "size": 5,
-    "type": "alfanum",
+    "type": "num",
     "descr": "Finalidade da TED."
   },
   "brancos_b": {
