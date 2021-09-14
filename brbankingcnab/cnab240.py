@@ -103,8 +103,10 @@ class LoteCNAB240(BlocoCNAB):
         num = 0
         try:
             for record in self.content:
-                if record.content['segmento']['val'] == SEGMENTO_A:
-                    num += 1
+                # Versão que só incrementa no seguimento A
+                # if record.content['segmento']['val'] == SEGMENTO_A:
+                #     num += 1
+                num += 1  # Versão que sempre incrementa.
             self.trailer['total_qtd_registros']['val'] = num
         except KeyError:
             raise CNAB240KeyError(class_name=self.__class__.__name__, method_name='add(lote)',
@@ -145,10 +147,12 @@ class LoteCNAB240(BlocoCNAB):
 
         # Atualiza 'numero_registro' do registro e o adiciona ao lote.
         try:
-            if record.content['segmento']['val'] == SEGMENTO_A:
-                record.content['numero_registro']['val'] = self.get_record_count() + 1
-            else:
-                record.content['numero_registro']['val'] = self.get_record_count()
+            # Versão que só incrementa no seguimento A
+            # if record.content['segmento']['val'] == SEGMENTO_A:
+            #     record.content['numero_registro']['val'] = self.get_record_count() + 1
+            # else:
+            #     record.content['numero_registro']['val'] = self.get_record_count()
+            record.content['numero_registro']['val'] = self.get_record_count() + 1  # Versão que sempre incrementa.
         except KeyError:
             raise CNAB240KeyError(class_name=record.__class__.__name__, method_name='add(lote)',
                                   template_name=record.template,

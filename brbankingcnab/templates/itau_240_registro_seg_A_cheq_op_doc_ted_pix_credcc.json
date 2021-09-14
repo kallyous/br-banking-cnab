@@ -119,7 +119,7 @@
     "descr": "Valor previsto no pagamento. Em centavos, sem vírgula."
   },
   "nosso_numero": {
-    "val": null,
+    "val": "",
     "index": 134,
     "size": 15,
     "type": "alfanum",
@@ -154,10 +154,10 @@
     "descr": "Informação complementar para histórico de conta corrente."
   },
   "numero_documento": {
-    "val": "",
+    "val": 0,
     "index": 197,
     "size": 6,
-    "type": "alfanum",
+    "type": "num",
     "descr": "Número no DOC/TED/OP/CHEQUE no retorno. Retornado no CNAB do banco."
   },
   "numero_inscricao": {
