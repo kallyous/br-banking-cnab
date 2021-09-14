@@ -99,8 +99,11 @@ class LoteCNAB240(BlocoCNAB):
         # Chama construtor da superclasse, responsável por carregar header, trailer e preparar content = [].
         super().__init__(batch_type, enclosed=True)
 
+        # Define quantidade de registros para 2: header e trailer.
+        self.update_record_count()
+
     def update_record_count(self):
-        num = 0
+        num = 2  # Primeiro registro é o header de lote e último o trailer de lote.
         try:
             for record in self.content:
                 # Versão que só incrementa no seguimento A
@@ -152,7 +155,7 @@ class LoteCNAB240(BlocoCNAB):
             #     record.content['numero_registro']['val'] = self.get_record_count() + 1
             # else:
             #     record.content['numero_registro']['val'] = self.get_record_count()
-            record.content['numero_registro']['val'] = self.get_record_count() + 1  # Versão que sempre incrementa.
+            record.content['numero_registro']['val'] = self.get_record_count() - 1  # count + 1 - 2, pra desconsiderar header e trailer da contagem.
         except KeyError:
             raise CNAB240KeyError(class_name=record.__class__.__name__, method_name='add(lote)',
                                   template_name=record.template,
@@ -192,7 +195,7 @@ class ArquivoCNAB240(BlocoCNAB):
         super().__init__(file_type, enclosed=True)
 
     def update_total_records(self):
-        total_records = 0
+        total_records = 2  # Primeiro registro é o header de arquivo, último é seu trailer.
         for batch in self.content:
             total_records += batch.get_record_count()
         self.trailer['total_qtd_registros']['val'] = total_records
