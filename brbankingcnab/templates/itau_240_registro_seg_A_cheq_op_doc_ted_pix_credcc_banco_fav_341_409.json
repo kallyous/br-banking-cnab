@@ -133,17 +133,17 @@
     "descr": "Tipo da moeda. REA ou 009."
   },
   "codigo_ispb": {
-    "val": null,
+    "val": 0,
     "index": 104,
     "size": 8,
-    "type": "alfanum",
+    "type": "num",
     "descr": "Identificação da instituição para o SPB."
   },
   "identi_transfer": {
-    "val": "01",
+    "val": "00",
     "index": 112,
     "size": 2,
-    "type": "alfanum",
+    "type": "num",
     "descr": "Conta de pagamento / PIX."
   },
   "zeros": {
