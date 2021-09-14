@@ -67,9 +67,13 @@ class RecordTemplate240(enum.Enum):
             content = json.load(file, object_pairs_hook=OrderedDict)
         """
 
-    # Registro de seguimento A tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente.
-    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC = os.path.join(DATA_DIR,
-                                                        'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc.json')
+    # Registro de seguimento A tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente. Padrão 341 e 409
+    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_341_409 = os.path.join(DATA_DIR,
+                                                        'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc_banco_fav_341_409.json')
+
+    # Registro de seguimento A tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente. Padrão 341 e 409
+    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_misc = os.path.join(DATA_DIR,
+                                                        'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc_banco_fav_misc.json')
 
     # Registro de seguimento B tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente.
     Itau_SegB_Cheq_OP_DOC_TED_CredCC = os.path.join(DATA_DIR,
