@@ -55,12 +55,54 @@
     "type": "num",
     "descr": "Código do banco favorecido."
   },
-  "agencia_conta": {
-    "val": null,
+  "zeros_a": {
+    "val": 0,
     "index": 23,
-    "size": 20,
+    "size": 1,
+    "type": "num",
+    "descr": "Controle de registro."
+  },
+  "agencia": {
+    "val": null,
+    "index": 24,
+    "size": 4,
     "type": "num",
     "descr": "Agência conta favorecido (que? ò_Ó )."
+  },
+  "branco_a": {
+    "val": " ",
+    "index": 28,
+    "size": 1,
+    "type": "alfanum",
+    "descr": "Controle de registro."
+  },
+  "zeros_b": {
+    "val": 0,
+    "index": 29,
+    "size": 6,
+    "type": "num",
+    "descr": "Controle de registro."
+  },
+  "conta": {
+    "val": null,
+    "index": 35,
+    "size": 6,
+    "type": "num",
+    "descr": "Número da conta corrente creditada."
+  },
+  "branco_pre_dac": {
+    "val": " ",
+    "index": 41,
+    "size": 1,
+    "type": "alfanum",
+    "descr": "Controle de registro."
+  },
+  "dac": {
+    "val": null,
+    "index": 42,
+    "size": 1,
+    "type": "num",
+    "descr": "Dígito da agência/conta creditada."
   },
   "nome_favorecido": {
     "val": null,
