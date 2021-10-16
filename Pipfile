@@ -9,6 +9,3 @@ coveralls = "*"
 pytest-cov = "*"
 
 [dev-packages]
-
-[requires]
-python_version = "3.9"

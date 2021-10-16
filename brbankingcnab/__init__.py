@@ -6,12 +6,19 @@ At the current development, only implements a few templates blocks for Itaú ban
 __version__ = '0.2.0-dev.2'
 __author__ = 'Lucas Carvalho Flores'
 
+import enum
 import json
 import os
 from collections import OrderedDict
 
 CWD = os.path.abspath(os.path.dirname(__file__))
 DATA_DIR = os.path.join(CWD, 'templates')
+
+
+class BlockType(enum.Enum):
+    Arquivo = 'arquivo'
+    Lote = 'lote'
+    Regsitro = 'registro'
 
 
 class CNABError(Exception):
@@ -86,29 +93,54 @@ def bake_cnab_string(data, strict=False):
 
 
 class BlocoCNAB:
+    """Representa abstração de um bloco de dados de um arquivo CNAB, seja ele um Caabeçalho+Rodapé ou Registro.
+
+    A rotina de criação de uma String CNAB é direta: cria-se o bloco e se adiciona os dados em
+    header['nome_campo']['val'], trailer['nome_campo']['val'] e, exclusivamente para Registros por não terem
+    cabeçalho ou rodapé, content['nome_campo']['val'] tem seus dados. Blocos e Lotes guardam uma lista com seus
+    filhos content.
+
+    A rotina de leitura de uma string CNAB é menos direta, e a string deve ser passada para um objeto tipo BlocoCNABxxx
+    para que esse interprete a string recebida e salve o resultado em si mesma, tendo criado tantos filhos
+    quanto necesário.
+
+    Rotina de Leitura:
+
+    BlocoCNAB.read_str(self, data_str, enclosed=True, block_type):  block_type é o template a ser usado.
+        if enclosed: self.parse_header()  analisa cabeçalho, se houver
+        content_str = ...  rotina que separa conteúdo interno do cabeçalho e rodapé
+        self.parse_content_str(data_str, enclosed, block_type)  vai chamar o read_str no que falta
+        if enclosed: self.parse_trailer(data_str)
+        return self
+
+    """
+
     header = None
     content = None
     trailer = None
     enclosed = None
+    block_type = None
     template = 'Desconhecido'
 
-    def __init__(self, block_type, enclosed):
+    def __init__(self, template, enclosed):
         self.enclosed = enclosed
-        self.template = block_type.value
+        self.template = template.value
 
-        # Se não for do tipo [header ... trailer], não se edita o nome do arquivo a ser carregado pois só há um.
+        # Se não for do tipo [header ... trailer], não se edita o nome do arquivo de template
+        # a ser carregado pois só há um.
         if not enclosed:
-            with open(block_type.value, 'r') as file:
+            with open(template.value, 'r') as file:
                 self.content = json.load(file, object_pairs_hook=OrderedDict)
 
-        # Blocos do tipo [header ... trailer] ajustam o nome pra carregar as duas partes, header e trailer.
+        # Blocos do tipo [header ... trailer] ajustam o nome do arquivo de template
+        # pra carregar as duas partes, header e trailer.
         else:
-            # Carrega template do header do lote.
-            with open(block_type.value.format('header'), 'r') as file:
+            # Carrega template do header do bloco.
+            with open(template.value.format('header'), 'r') as file:
                 self.header = json.load(file, object_pairs_hook=OrderedDict)
 
-            # Carrega template do trailer do lote.
-            with open(block_type.value.format('trailer'), 'r') as file:
+            # Carrega template do trailer do bloco.
+            with open(template.value.format('trailer'), 'r') as file:
                 self.trailer = json.load(file, object_pairs_hook=OrderedDict)
 
             # Prepara lista para receber os filhos.

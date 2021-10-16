@@ -83,25 +83,25 @@ class RecordTemplate240(enum.Enum):
 class RegistroCNAB240(BlocoCNAB):
     """Define um registro de detalhes para uma transação que vai dentro de um lote CNAB 240."""
 
-    def __init__(self, record_type):
+    def __init__(self, record_template):
         # Dispara erro se tipo de registro for inválido/não-implementado.
-        if record_type not in [item for item in RecordTemplate240]:
-            raise CNABInvalidTemplateError(record_type, self.__class__.__name__, RecordTemplate240)
+        if record_template not in [item for item in RecordTemplate240]:
+            raise CNABInvalidTemplateError(record_template, self.__class__.__name__, RecordTemplate240)
 
         # Chama construtor da superclasse, responsável por carregar template em content.
-        super().__init__(record_type, enclosed=False)
+        super().__init__(record_template, enclosed=False)
 
 
 class LoteCNAB240(BlocoCNAB):
     """Define um lote de registros para um arquivo CNAB 240."""
 
-    def __init__(self, batch_type):
+    def __init__(self, batch_template):
         # Dispara erro se tipo de lote for inválido/não-implementado.
-        if batch_type not in [item for item in BatchTemplate240]:
-            raise CNABInvalidTemplateError(batch_type, self.__class__.__name__, BatchTemplate240)
+        if batch_template not in [item for item in BatchTemplate240]:
+            raise CNABInvalidTemplateError(batch_template, self.__class__.__name__, BatchTemplate240)
 
         # Chama construtor da superclasse, responsável por carregar header, trailer e preparar content = [].
-        super().__init__(batch_type, enclosed=True)
+        super().__init__(batch_template, enclosed=True)
 
         # Define quantidade de registros para 2: header e trailer.
         self.update_record_count()
@@ -189,14 +189,14 @@ class LoteCNAB240(BlocoCNAB):
 class ArquivoCNAB240(BlocoCNAB):
     """Define um arquivo de remessa CNAB 240."""
 
-    def __init__(self, file_type):
+    def __init__(self, file_template):
 
         # Dispara erro se tipo de arquivo for inválido/não-implementado.
-        if file_type not in [item for item in FileTemplate240]:
-            raise CNABInvalidTemplateError(file_type, self.__class__.__name__, FileTemplate240)
+        if file_template not in [item for item in FileTemplate240]:
+            raise CNABInvalidTemplateError(file_template, self.__class__.__name__, FileTemplate240)
 
         # Chama construtor da superclasse, responsável por carregar header, header e preparar content = [].
-        super().__init__(file_type, enclosed=True)
+        super().__init__(file_template, enclosed=True)
 
     def update_total_records(self):
         total_records = 2  # Primeiro registro é o header de arquivo, último é seu trailer.

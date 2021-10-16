@@ -327,3 +327,5 @@ fabric.properties
 
 # Custom personal use shitness
 quick-test.py
+tmp/
+ref/
