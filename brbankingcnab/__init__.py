@@ -92,6 +92,28 @@ def bake_cnab_string(data, strict=False):
     return data_str + '\n'
 
 
+def parse_cnab_string(cnab_str, cnab_layout_code, file_template):
+    lines_raw = cnab_str.split('\n')
+    lines = []
+
+    for line_r in lines_raw:
+        line = line_r.replace('\r', '').strip('\n')
+        if len(line) > 0:
+            lines.append(line)
+
+    for line in lines:
+        print(f"::{line}::")
+
+    # Layout de CNAB 240
+    if cnab_layout_code == 240:
+        from brbankingcnab.cnab240 import ArquivoCNAB240
+        cnab_file = ArquivoCNAB240(file_template)
+    else:
+        raise CNABError(message='Apenas o layout de arquivo 240 está implementado no momento.')
+
+    cnab_file.fill(lines)
+
+
 class BlocoCNAB:
     """Representa abstração de um bloco de dados de um arquivo CNAB, seja ele um Caabeçalho+Rodapé ou Registro.
 
@@ -146,6 +168,23 @@ class BlocoCNAB:
             # Prepara lista para receber os filhos.
             self.content = []
 
+    def __str__(self):
+        """Visualizar conteúdo, tolerando valores ausentes."""
+        return 'Conteúdo do CNAB:\n' + self.make(strict=False) + '\nPara gerar o CNAB usável, use o método make() .'
+
+    def fill_cnab_file(self, lines: list):
+        """Recebe lista de linhas contendo strings de um arquivo CNAB completo e recosntroi CNAB."""
+
+        # Arquivo ou lote.
+        if self.enclosed:
+            self.parse_header_str(lines[0])
+            self.parse_content_list(lines[1:-1])
+            self.parse_trailer_str(lines[-1])
+
+        # Registro.
+        else:
+            self.parse_content_str(lines)
+
     def make(self, strict=True):
         """Gera string com os dados formatados.
         Se strict == True, campos vazios não são tolerados e geram erros.
@@ -171,10 +210,13 @@ class BlocoCNAB:
         else:
             data_str = bake_cnab_string(self.content, strict=strict)
 
+        # Windows ANSI shitness
+        data_str = data_str.replace('\n', '\r\n')
+
         # String final.
         return data_str
 
-    def add(self, entry):
+    def add(self, entry: object):
         """Adiciona ao final de self.content se o bloco for do tipo [header ... trailer], senão gera erro."""
 
         name = self.__class__.__name__
@@ -193,6 +235,65 @@ class BlocoCNAB:
               f'mas os valores das entradas de {name} não serão atualizados automaticamente. Você deve atualiza-los '
               f'explicitamente até esta funcionalidade ser adicionada em uma atualização futura.')
 
-    def __str__(self):
-        """Visualizar conteúdo, tolerando valores ausentes."""
-        return 'Conteúdo do CNAB:\n' + self.make(strict=False) + '\nPara gerar o CNAB usável, use o método make() .'
+    def parse_content_list(self, content: list):
+        """Recebe lista de strings contento os lotes e seus registros de detalhes de um arquivo CNAB em construção.
+        Encontra todos os lotes e seus registros e chama seus métodos de cosntrução e interpretação."""
+
+        while len(content) > 0:
+            line = content.pop(0)
+            if self.is_batch_header(line):
+                # TODO: cria novo arquivo de lote e interpreta cabeçalho
+                line = content.pop(0)
+                while self.is_record(line):
+                    # TODO: cria registro de operação e interpreta conteúdo.
+                    line = content.pop(0)
+                # Ao chegarmos aqui, é obrigatório que line seja trailer de lote.
+                if not self.is_batch_trailer(line):
+                    raise CNABError(message="CNAB inválido.")
+                # TODO: interpreta trailer do lote atual e valida, lançando erro se necessário.
+            else:
+                raise CNABError(message="CNAB inválido.")
+
+        # ----------------------------------------------------------------------------------------------------
+        # Para cada linha:
+        #   se a linha for abertura de lote;
+        #       interpreta linha de cabeçalho para criar novo lote e adiciona lote ao arquivo atual.
+        #       para cada linha seguinte (usando mesmo indice do loop externo):
+        #           se a linha for registro de operação:
+        #               interpreta linha para criar novo registro com ela e adiciona ao lote atual.
+        #           senão, se a linha for trailer de lote:
+        #               interpreta linha de trailer e valida lote, lançando erro se necessário.
+        #               saia do loop atual e volte ao que aceita header de lote e trailer de arquivo.
+        #           senão:
+        #               lance erro de string CNAB inválida.
+        # ---------------------------------------------------------------------------------------------------
+        #
+        # NÂO PRECISA DESTA PARTE
+        #   senão se a linha for trailer de arquivo:
+        #       interpreta linha de trailer de arquivo e valida arquivo inteiro, lançando erro se necessário.
+        #   senão:
+        #       lance erro de string CNAB inválida.
+
+    def parse_header_str(self, header: str) -> dict:
+        """Interpreta string de header de arquivo/lote e retorna dict preenchido."""
+        pass
+
+    def parse_trailer_str(self, trailer: str) -> dict:
+        """Interpreta string trailer de arquivo/lote e retorna dict preenchido."""
+        pass
+
+    def parse_content_str(self, content: str) -> dict:
+        """Interpreta string de registro de detalhes e retorna dict preenchido."""
+        pass
+
+    def is_batch_header(self, line: str) -> bool:
+        """Analisa string e verifica se trata-se de um header de lote."""
+        pass
+
+    def is_batch_trailer(self, line: str) -> bool:
+        """Analisa string e verifica se trata-se de um trailer de lote."""
+        pass
+
+    def is_record(self, line: str) -> bool:
+        """Analisa string e verifica se trata-se de um registro de detalhes."""
+        pass
