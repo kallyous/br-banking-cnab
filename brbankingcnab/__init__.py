@@ -274,13 +274,31 @@ class BlocoCNAB:
               f'mas os valores das entradas de {name} não serão atualizados automaticamente. Você deve atualiza-los '
               f'explicitamente até esta funcionalidade ser adicionada em uma atualização futura.')
 
-    def parse_header_str(self, header: str) -> dict:
+    def parse_header_str(self, header: str):
         """Interpreta string de header de arquivo/lote e retorna dict preenchido."""
-        pass
+        print(header, self.__class__.__name__)
+        for item in self.header:
+            start = self.header[item]['index']
+            end = self.header[item]['index'] + self.header[item]['size']
+            value = header[start:end]
+            if self.header[item]['type'] == "alfanum":
+                self.header[item]['val'] = value
+            else:
+                self.header[item]['val'] = int(value)
+            print(item, self.header[item]['val'])
 
-    def parse_trailer_str(self, trailer: str) -> dict:
+    def parse_trailer_str(self, trailer: str):
         """Interpreta string trailer de arquivo/lote e retorna dict preenchido."""
-        pass
+        print(trailer, self.__class__.__name__)
+        for item in self.trailer:
+            start = self.trailer[item]['index']
+            end = self.trailer[item]['index'] + self.trailer[item]['size']
+            value = trailer[start:end]
+            if self.trailer[item]['type'] == "alfanum":
+                self.trailer[item]['val'] = value
+            else:
+                self.trailer[item]['val'] = int(value)
+            print(item, self.trailer[item]['val'])
 
     def is_batch_header(self, line: str) -> bool:
         """Analisa string e verifica se trata-se de um header de lote."""

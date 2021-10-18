@@ -287,14 +287,6 @@ class ArquivoCNAB240(BlocoCNAB):
         else:
             return False
 
-    def parse_header_str(self, header: str) -> dict:
-        print(header, self.__class__.__name__)
-        return {}
-
-    def parse_trailer_str(self, trailer: str) -> dict:
-        print(trailer, self.__class__.__name__)
-        return {}
-
     def new_batch_from_header(self, line: str) -> BlocoCNAB:
         print(line, self.__class__.__name__)
         return LoteCNAB240(BatchTemplate240.Itau_Cheq_OP_DOC_TED_PIX_CredCC)
