@@ -31,7 +31,7 @@ class FileTemplate240(enum.Enum):
             trailer = json.load(file, object_pairs_hook=OrderedDict)
     """
 
-    FileItau = os.path.join(DATA_DIR, 'itau_240_arquivo_{0}.json')
+    FileItau = {'code': 1, 'path': os.path.join(DATA_DIR, 'itau_240_arquivo_{0}.json')}
 
 
 class BatchTemplate240(enum.Enum):
@@ -51,10 +51,16 @@ class BatchTemplate240(enum.Enum):
     """
 
     # Template de header/trailer de lote Itaú para pagamentos em cheque, OP, DOC, TED, PIX ou crédito em conta corrente.
-    Itau_Cheq_OP_DOC_TED_PIX_CredCC = os.path.join(DATA_DIR, 'itau_240_lote_cheq_op_doc_ted_pix_credcc_{0}.json')
+    Itau_Cheq_OP_DOC_TED_PIX_CredCC = {
+        'code': 0,
+        'path': os.path.join(DATA_DIR, 'itau_240_lote_cheq_op_doc_ted_pix_credcc_{0}.json')
+    }
 
     # Template de header/trailer de lote Itaú para pagamentos em boleto ou PIX QRcode.
-    Itau_Boleto_PIXqrcode = None  # TODO: Lote de boletos será o próximo template. ;-)
+    Itau_Boleto_PIXqrcode = {
+        'code': 0,
+        'path': None  # TODO: Lote de boletos será o próximo template. ;-)
+    }
 
 
 class RecordTemplate240(enum.Enum):
@@ -69,16 +75,22 @@ class RecordTemplate240(enum.Enum):
         """
 
     # Registro de seguimento A tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente. Padrão 341 e 409
-    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_341_409 = os.path.join(DATA_DIR,
-                                                        'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc_banco_fav_341_409.json')
+    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_341_409 = {
+        'code': 0,
+        'path': os.path.join(DATA_DIR, 'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc_banco_fav_341_409.json')
+    }
 
     # Registro de seguimento A tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente. Padrão 341 e 409
-    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_misc = os.path.join(DATA_DIR,
-                                                        'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc_banco_fav_misc.json')
+    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_misc = {
+        'code': 0,
+        'path': os.path.join(DATA_DIR, 'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc_banco_fav_misc.json')
+    }
 
     # Registro de seguimento B tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente.
-    Itau_SegB_Cheq_OP_DOC_TED_CredCC = os.path.join(DATA_DIR,
-                                                        'itau_240_registro_seg_B_cheq_op_doc_ted_credcc.json')
+    Itau_SegB_Cheq_OP_DOC_TED_CredCC = {
+        'code': 0,
+        'path': os.path.join(DATA_DIR, 'itau_240_registro_seg_B_cheq_op_doc_ted_credcc.json')
+    }
 
 
 class RegistroCNAB240(BlocoCNAB):

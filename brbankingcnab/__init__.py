@@ -161,18 +161,18 @@ class BlocoCNAB:
         # Se não for do tipo [header ... trailer], não se edita o nome do arquivo de template
         # a ser carregado pois só há um.
         if not enclosed:
-            with open(template.value, 'r') as file:
+            with open(template.value['path'], 'r') as file:
                 self.content = json.load(file, object_pairs_hook=OrderedDict)
 
         # Blocos do tipo [header ... trailer] ajustam o nome do arquivo de template
         # pra carregar as duas partes, header e trailer.
         else:
             # Carrega template do header do bloco.
-            with open(template.value.format('header'), 'r') as file:
+            with open(template.value['path'].format('header'), 'r') as file:
                 self.header = json.load(file, object_pairs_hook=OrderedDict)
 
             # Carrega template do trailer do bloco.
-            with open(template.value.format('trailer'), 'r') as file:
+            with open(template.value['path'].format('trailer'), 'r') as file:
                 self.trailer = json.load(file, object_pairs_hook=OrderedDict)
 
             # Prepara lista para receber os filhos.
