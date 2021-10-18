@@ -52,14 +52,14 @@ class BatchTemplate240(enum.Enum):
 
     # Template de header/trailer de lote Itaú para pagamentos em cheque, OP, DOC, TED, PIX ou crédito em conta corrente.
     Itau_Cheq_OP_DOC_TED_PIX_CredCC = {
-        'code': 0,
+        'code': 40,
         'path': os.path.join(DATA_DIR, 'itau_240_lote_cheq_op_doc_ted_pix_credcc_{0}.json')
     }
 
     # Template de header/trailer de lote Itaú para pagamentos em boleto ou PIX QRcode.
-    Itau_Boleto_PIXqrcode = {
-        'code': 0,
-        'path': None  # TODO: Lote de boletos será o próximo template. ;-)
+    Itau_Blt_Cod_Bar_PIXqr_tit_trib_conces_FGTS = {
+        'code': 30,
+        'path': None  # TODO: Esse será o próximo template. ;-)
     }
 
 
@@ -301,7 +301,18 @@ class ArquivoCNAB240(BlocoCNAB):
 
     def new_batch_from_header(self, line: str) -> BlocoCNAB:
         print(line, self.__class__.__name__)
-        return LoteCNAB240(BatchTemplate240.Itau_Cheq_OP_DOC_TED_PIX_CredCC)
+        layout_code = int(line[13:16])
+
+        batch = None
+        for template in BatchTemplate240:
+            if template.value['code'] == layout_code:
+                batch = LoteCNAB240(template)
+
+        if not batch:
+            raise CNABError(message=f"Nenhum template de lote válido para o código {layout_code}.")
+
+        batch.parse_header_str(line)
+        return batch
 
     def parse_batch_trailer(self, batch: LoteCNAB240, line: str) -> bool:
         print(line, self.__class__.__name__)

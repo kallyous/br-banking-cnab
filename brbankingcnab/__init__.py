@@ -214,12 +214,8 @@ class BlocoCNAB:
                 if not self.is_batch_trailer(line):
                     raise CNABError(message="CNAB inválido.")
                 # Interpreta a linha de trailer de lote. Retorna bool indicando se tudo está correto e válido.
-                if self.parse_batch_trailer(batch, line):
-                    # self.add(batch)
-                    pass
-                else:
-                    # Falha na validação do lote criado.
-                    raise CNABError(message="Lote inválido.")
+                batch.parse_trailer_str(line)
+                # self.add(batch)
             else:
                 # Só se chega aqui com linhas de trailer de lote.
                 raise CNABError(message="CNAB inválido.")
@@ -316,7 +312,4 @@ class BlocoCNAB:
         pass
 
     def new_record_from_str(self, line: str) -> BlocoCNAB:
-        pass
-
-    def parse_batch_trailer(self, batch: BlocoCNAB, line: str) -> bool:
         pass
