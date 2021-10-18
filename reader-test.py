@@ -1,4 +1,6 @@
-import sys, os
+import os
+import sys
+
 from brbankingcnab import parse_cnab_string
 from brbankingcnab.cnab240 import FileTemplate240
 

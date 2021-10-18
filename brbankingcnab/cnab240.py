@@ -1,7 +1,8 @@
 import os
 import enum
 
-from brbankingcnab import DATA_DIR, BlocoCNAB, CNABError, CNABInvalidTemplateError, CNABInvalidOperationError
+from brbankingcnab import DATA_DIR, BlocoCNAB, CNABError, CNABInvalidTemplateError, CNABInvalidOperationError, \
+    BlockType
 
 SEGMENTO_A = 'A'  # Código do seguimento A.
 
@@ -88,6 +89,8 @@ class RegistroCNAB240(BlocoCNAB):
         if record_template not in [item for item in RecordTemplate240]:
             raise CNABInvalidTemplateError(record_template, self.__class__.__name__, RecordTemplate240)
 
+        self.block_type = BlockType.Regsitro
+
         # Chama construtor da superclasse, responsável por carregar template em content.
         super().__init__(record_template, enclosed=False)
 
@@ -99,6 +102,8 @@ class LoteCNAB240(BlocoCNAB):
         # Dispara erro se tipo de lote for inválido/não-implementado.
         if batch_template not in [item for item in BatchTemplate240]:
             raise CNABInvalidTemplateError(batch_template, self.__class__.__name__, BatchTemplate240)
+
+        self.block_type = BlockType.Lote
 
         # Chama construtor da superclasse, responsável por carregar header, trailer e preparar content = [].
         super().__init__(batch_template, enclosed=True)
@@ -195,6 +200,8 @@ class ArquivoCNAB240(BlocoCNAB):
         if file_template not in [item for item in FileTemplate240]:
             raise CNABInvalidTemplateError(file_template, self.__class__.__name__, FileTemplate240)
 
+        self.block_type = BlockType.Arquivo
+
         # Chama construtor da superclasse, responsável por carregar header, header e preparar content = [].
         super().__init__(file_template, enclosed=True)
 
@@ -261,3 +268,41 @@ class ArquivoCNAB240(BlocoCNAB):
 
         # Atualiza contagem de registros dos lotes.
         self.update_total_records()
+
+    def is_batch_header(self, line: str) -> bool:
+        if line[7] == '1':
+            return True
+        else:
+            return False
+
+    def is_batch_trailer(self, line: str) -> bool:
+        if line[7] == '5':
+            return True
+        else:
+            return False
+
+    def is_record(self, line: str) -> bool:
+        if line[7] == '3':
+            return True
+        else:
+            return False
+
+    def parse_header_str(self, header: str) -> dict:
+        print(header, self.__class__.__name__)
+        return {}
+
+    def parse_trailer_str(self, trailer: str) -> dict:
+        print(trailer, self.__class__.__name__)
+        return {}
+
+    def new_batch_from_header(self, line: str) -> BlocoCNAB:
+        print(line, self.__class__.__name__)
+        return LoteCNAB240(BatchTemplate240.Itau_Cheq_OP_DOC_TED_PIX_CredCC)
+
+    def parse_batch_trailer(self, batch: LoteCNAB240, line: str) -> bool:
+        print(line, self.__class__.__name__)
+        return True
+
+    def new_record_from_str(self, line: str) -> BlocoCNAB:
+        print(line, self.__class__.__name__)
+        return RegistroCNAB240(RecordTemplate240.Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_misc)

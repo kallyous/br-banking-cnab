@@ -104,6 +104,8 @@ def parse_cnab_string(cnab_str, cnab_layout_code, file_template):
     for line in lines:
         print(f"::{line}::")
 
+    print()
+
     # Layout de CNAB 240
     if cnab_layout_code == 240:
         from brbankingcnab.cnab240 import ArquivoCNAB240
@@ -111,7 +113,15 @@ def parse_cnab_string(cnab_str, cnab_layout_code, file_template):
     else:
         raise CNABError(message='Apenas o layout de arquivo 240 está implementado no momento.')
 
-    cnab_file.fill(lines)
+    cnab_file.fill_cnab_file(lines)
+
+
+class BlocoCNAB:
+    """Declaração apenas, para melhor implementação da interface.
+    Equivalente a declarar as coisas em C++ para implementar depois, deixando disponível o nome da classe ou função
+    para o compilador (ou interpretador nesse caso) fazer as conexões necessárias.
+    """
+    pass
 
 
 class BlocoCNAB:
@@ -175,15 +185,44 @@ class BlocoCNAB:
     def fill_cnab_file(self, lines: list):
         """Recebe lista de linhas contendo strings de um arquivo CNAB completo e recosntroi CNAB."""
 
-        # Arquivo ou lote.
-        if self.enclosed:
-            self.parse_header_str(lines[0])
-            self.parse_content_list(lines[1:-1])
-            self.parse_trailer_str(lines[-1])
+        if not self.block_type == BlockType.Arquivo:
+            raise CNABError(message="BlocoCNAB.fill_canb_file() só pode ser chamado a partir de um ArquivoCNAB***.")
 
-        # Registro.
-        else:
-            self.parse_content_str(lines)
+        if len(lines) < 5:
+            raise CNABError(message="CNAB com menos de cinco linhas não possui registros e está vazio.")
+
+        self.parse_header_str(lines[0])
+        self.parse_content_list(lines[1:-1])
+        self.parse_trailer_str(lines[-1])
+
+    def parse_content_list(self, content: list):
+        """Recebe lista de strings contento os lotes e seus registros de detalhes de um arquivo CNAB em construção.
+        Encontra todos os lotes e seus registros e chama seus métodos de cosntrução e interpretação."""
+
+        while len(content) > 0:
+            line = content.pop(0)
+            if self.is_batch_header(line):
+                # TODO: cria novo arquivo de lote e interpreta cabeçalho
+                batch = self.new_batch_from_header(line)
+                line = content.pop(0)
+                while self.is_record(line):
+                    # TODO: cria registro de operação e interpreta conteúdo.
+                    record = self.new_record_from_str(line)
+                    # batch.add(record)
+                    line = content.pop(0)
+                # Ao chegarmos aqui, é obrigatório que line seja trailer de lote.
+                if not self.is_batch_trailer(line):
+                    raise CNABError(message="CNAB inválido.")
+                # Interpreta a linha de trailer de lote. Retorna bool indicando se tudo está correto e válido.
+                if self.parse_batch_trailer(batch, line):
+                    # self.add(batch)
+                    pass
+                else:
+                    # Falha na validação do lote criado.
+                    raise CNABError(message="Lote inválido.")
+            else:
+                # Só se chega aqui com linhas de trailer de lote.
+                raise CNABError(message="CNAB inválido.")
 
     def make(self, strict=True):
         """Gera string com os dados formatados.
@@ -235,55 +274,12 @@ class BlocoCNAB:
               f'mas os valores das entradas de {name} não serão atualizados automaticamente. Você deve atualiza-los '
               f'explicitamente até esta funcionalidade ser adicionada em uma atualização futura.')
 
-    def parse_content_list(self, content: list):
-        """Recebe lista de strings contento os lotes e seus registros de detalhes de um arquivo CNAB em construção.
-        Encontra todos os lotes e seus registros e chama seus métodos de cosntrução e interpretação."""
-
-        while len(content) > 0:
-            line = content.pop(0)
-            if self.is_batch_header(line):
-                # TODO: cria novo arquivo de lote e interpreta cabeçalho
-                line = content.pop(0)
-                while self.is_record(line):
-                    # TODO: cria registro de operação e interpreta conteúdo.
-                    line = content.pop(0)
-                # Ao chegarmos aqui, é obrigatório que line seja trailer de lote.
-                if not self.is_batch_trailer(line):
-                    raise CNABError(message="CNAB inválido.")
-                # TODO: interpreta trailer do lote atual e valida, lançando erro se necessário.
-            else:
-                raise CNABError(message="CNAB inválido.")
-
-        # ----------------------------------------------------------------------------------------------------
-        # Para cada linha:
-        #   se a linha for abertura de lote;
-        #       interpreta linha de cabeçalho para criar novo lote e adiciona lote ao arquivo atual.
-        #       para cada linha seguinte (usando mesmo indice do loop externo):
-        #           se a linha for registro de operação:
-        #               interpreta linha para criar novo registro com ela e adiciona ao lote atual.
-        #           senão, se a linha for trailer de lote:
-        #               interpreta linha de trailer e valida lote, lançando erro se necessário.
-        #               saia do loop atual e volte ao que aceita header de lote e trailer de arquivo.
-        #           senão:
-        #               lance erro de string CNAB inválida.
-        # ---------------------------------------------------------------------------------------------------
-        #
-        # NÂO PRECISA DESTA PARTE
-        #   senão se a linha for trailer de arquivo:
-        #       interpreta linha de trailer de arquivo e valida arquivo inteiro, lançando erro se necessário.
-        #   senão:
-        #       lance erro de string CNAB inválida.
-
     def parse_header_str(self, header: str) -> dict:
         """Interpreta string de header de arquivo/lote e retorna dict preenchido."""
         pass
 
     def parse_trailer_str(self, trailer: str) -> dict:
         """Interpreta string trailer de arquivo/lote e retorna dict preenchido."""
-        pass
-
-    def parse_content_str(self, content: str) -> dict:
-        """Interpreta string de registro de detalhes e retorna dict preenchido."""
         pass
 
     def is_batch_header(self, line: str) -> bool:
@@ -296,4 +292,13 @@ class BlocoCNAB:
 
     def is_record(self, line: str) -> bool:
         """Analisa string e verifica se trata-se de um registro de detalhes."""
+        pass
+
+    def new_batch_from_header(self, line: str) -> BlocoCNAB:
+        pass
+
+    def new_record_from_str(self, line: str) -> BlocoCNAB:
+        pass
+
+    def parse_batch_trailer(self, batch: BlocoCNAB, line: str) -> bool:
         pass
