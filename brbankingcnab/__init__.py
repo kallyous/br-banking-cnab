@@ -101,11 +101,6 @@ def parse_cnab_string(cnab_str, cnab_layout_code, file_template):
         if len(line) > 0:
             lines.append(line)
 
-    for line in lines:
-        print(f"::{line}::")
-
-    print()
-
     # Layout de CNAB 240
     if cnab_layout_code == 240:
         from brbankingcnab.cnab240 import ArquivoCNAB240
@@ -332,7 +327,6 @@ class BlocoCNAB:
 
     def parse_header_str(self, header: str):
         """Interpreta string de header de arquivo/lote e retorna dict preenchido."""
-        print(header, self.__class__.__name__)
         for item in self.header:
             start = self.header[item]['index']
             end = self.header[item]['index'] + self.header[item]['size']
@@ -341,11 +335,9 @@ class BlocoCNAB:
                 self.header[item]['val'] = value
             else:
                 self.header[item]['val'] = int(value)
-            print(item, self.header[item]['val'])
 
     def parse_record_str(self, record: str) -> BlocoCNAB:
         """Interpreta string de registro de detalhe e retorna dict preenchido."""
-        print(record, self.__class__.__name__)
 
         if self.enclosed:
             me = self.__class__.__name__
@@ -359,13 +351,11 @@ class BlocoCNAB:
                 self.content[item]['val'] = value
             else:
                 self.content[item]['val'] = int(value)
-            print(item, self.content[item]['val'])
 
         return self
 
     def parse_trailer_str(self, trailer: str):
         """Interpreta string trailer de arquivo/lote e retorna dict preenchido."""
-        print(trailer, self.__class__.__name__)
         for item in self.trailer:
             start = self.trailer[item]['index']
             end = self.trailer[item]['index'] + self.trailer[item]['size']
@@ -374,7 +364,6 @@ class BlocoCNAB:
                 self.trailer[item]['val'] = value
             else:
                 self.trailer[item]['val'] = int(value)
-            print(item, self.trailer[item]['val'])
 
     def is_batch_header(self, line: str) -> bool:
         """Analisa string e verifica se trata-se de um header de lote."""

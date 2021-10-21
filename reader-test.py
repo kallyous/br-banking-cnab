@@ -16,4 +16,4 @@ if __name__ == '__main__':
 
     cnab_file = parse_cnab_string(in_data_str, 240, FileTemplate240.FileItau)
 
-    print(cnab_file.make(strict=False))
+    print(cnab_file.make(strict=False), end='')

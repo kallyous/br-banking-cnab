@@ -238,9 +238,6 @@ class LoteCNAB240(BlocoCNAB):
 
         # Consulta versões do seguimento em questão para o tipo de lote atual
         for version in self.template['segments'][segment]:
-            print(segment, version['rules'])
-            print(eval_ruleset(line, version['rules']))
-
             if eval_ruleset(line, version['rules']):
                 # Cria registro com layout específico
                 record = RegistroCNAB240(version['layout'])
@@ -350,7 +347,6 @@ class ArquivoCNAB240(BlocoCNAB):
             return False
 
     def new_batch_from_header(self, line: str) -> BlocoCNAB:
-        print(line, self.__class__.__name__)
         layout_code = int(line[13:16])
 
         batch = None
