@@ -2,7 +2,7 @@ import os
 import enum
 
 from brbankingcnab import DATA_DIR, BlocoCNAB, CNABError, CNABInvalidTemplateError, CNABInvalidOperationError, \
-    BlockType
+    BlockType, eval_ruleset
 
 SEGMENTO_A = 'A'  # Código do seguimento A.
 
@@ -13,6 +13,88 @@ class CNAB240KeyError(CNABError):
     def __init__(self, class_name, method_name, field_name, template_name, message=''):
         super().__init__(f'\n\tEm {class_name}, com o template{template_name}, o método {method_name} tentou acessar'
                          f' o campo {field_name}. {message}')
+
+
+class RecordTemplate240(enum.Enum):
+    """Templates de tipos de registro CNAB 240 presentes e implementados.
+
+    Exemplo de uso:
+
+    1 - Carregar o template de registro para um pagamento TED:
+        template_path = RecordType240.Itau_Cheq_OP_DOC_TED_PIX_CredCC.value
+        with open(template_path, 'r') as file:
+            content = json.load(file, object_pairs_hook=OrderedDict)
+        """
+
+    # Registro de seguimento A tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente. Padrão 341 e 409
+    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_341_409 = {
+        'path': os.path.join(DATA_DIR, 'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc_banco_fav_341_409.json'),
+        'rules': [
+            {'start': 0, 'end': 3, 'operation': 'in', 'value': ['341', '409']},
+        ]
+    }
+
+    # Registro de seguimento A tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente. Padrão 341 e 409
+    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_misc = {
+        'path': os.path.join(DATA_DIR, 'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc_banco_fav_misc.json'),
+        'rules': []
+    }
+
+    # Registro de seguimento B tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente.
+    Itau_SegB_Cheq_OP_DOC_TED_CredCC = {
+        'path': os.path.join(DATA_DIR, 'itau_240_registro_seg_B_cheq_op_doc_ted_credcc.json'),
+        'rules': []
+    }
+
+
+class BatchTemplate240(enum.Enum):
+    """Templates de tipos de lotes CNAB 240 presentes e implementados.
+
+    Exemplo de uso:
+
+    1 - Carregar o template do header de um lote de boletos:
+        template_path = BatchType240.Boleto_PIXqrcode.value.format('header')
+        with open(template_path, 'r') as file:
+            header = json.load(file, object_pairs_hook=OrderedDict)
+
+    2 - Carregar o template do trailer do mesmo lote:
+        template_path = BatchType240.Boleto_PIXqrcode.value.format('trailer')
+        with open(template_path, 'r') as file:
+            trailer = json.load(file, object_pairs_hook=OrderedDict)
+    """
+
+    # Template de header/trailer de lote Itaú para pagamentos em cheque, OP, DOC, TED, PIX ou crédito em conta corrente.
+    Itau_Cheq_OP_DOC_TED_PIX_CredCC = {
+        'code': [40, 80],
+        'path': os.path.join(DATA_DIR, 'itau_240_lote_cheq_op_doc_ted_pix_credcc_{0}.json'),
+        'segments': {
+            'A': [
+                {
+                    'name': 'SEG-A Cheque, OP, DOC, TED, PIX Transferência e crédito em conta corrente - Alvo Itaú e Unibanc',
+                    'layout': RecordTemplate240.Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_341_409,
+                    'rules': RecordTemplate240.Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_341_409.value['rules']
+                },
+                {
+                    'name': 'SEG-A Cheque, OP, DOC, TED, PIX Transferência e crédito em conta corrente - Alvo Misc',
+                    'layout': RecordTemplate240.Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_misc,
+                    'rules': RecordTemplate240.Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_misc.value['rules']
+                }
+            ],
+            'B': [
+                {
+                    'name': 'SEG-B Cheque, OP, DOC, TED, PIX Transferência e crédito em conta corrente',
+                    'layout': RecordTemplate240.Itau_SegB_Cheq_OP_DOC_TED_CredCC,
+                    'rules': RecordTemplate240.Itau_SegB_Cheq_OP_DOC_TED_CredCC.value['rules']
+                }
+            ]
+        }
+    }
+
+    # Template de header/trailer de lote Itaú para pagamentos em boleto ou PIX QRcode.
+    Itau_Blt_Cod_Bar_PIXqr_tit_trib_conces_FGTS = {
+        'code': [30],
+        'path': None  # TODO: Esse será o próximo template. ;-)
+    }
 
 
 class FileTemplate240(enum.Enum):
@@ -34,67 +116,13 @@ class FileTemplate240(enum.Enum):
     FileItau = {'code': 1, 'path': os.path.join(DATA_DIR, 'itau_240_arquivo_{0}.json')}
 
 
-class BatchTemplate240(enum.Enum):
-    """Templates de tipos de lotes CNAB 240 presentes e implementados.
-
-    Exemplo de uso:
-
-    1 - Carregar o template do header de um lote de boletos:
-        template_path = BatchType240.Boleto_PIXqrcode.value.format('header')
-        with open(template_path, 'r') as file:
-            header = json.load(file, object_pairs_hook=OrderedDict)
-
-    2 - Carregar o template do trailer do mesmo lote:
-        template_path = BatchType240.Boleto_PIXqrcode.value.format('trailer')
-        with open(template_path, 'r') as file:
-            trailer = json.load(file, object_pairs_hook=OrderedDict)
-    """
-
-    # Template de header/trailer de lote Itaú para pagamentos em cheque, OP, DOC, TED, PIX ou crédito em conta corrente.
-    Itau_Cheq_OP_DOC_TED_PIX_CredCC = {
-        'code': 40,
-        'path': os.path.join(DATA_DIR, 'itau_240_lote_cheq_op_doc_ted_pix_credcc_{0}.json')
-    }
-
-    # Template de header/trailer de lote Itaú para pagamentos em boleto ou PIX QRcode.
-    Itau_Blt_Cod_Bar_PIXqr_tit_trib_conces_FGTS = {
-        'code': 30,
-        'path': None  # TODO: Esse será o próximo template. ;-)
-    }
-
-
-class RecordTemplate240(enum.Enum):
-    """Templates de tipos de registro CNAB 240 presentes e implementados.
-
-    Exemplo de uso:
-
-    1 - Carregar o template de registro para um pagamento TED:
-        template_path = RecordType240.Itau_Cheq_OP_DOC_TED_PIX_CredCC.value
-        with open(template_path, 'r') as file:
-            content = json.load(file, object_pairs_hook=OrderedDict)
-        """
-
-    # Registro de seguimento A tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente. Padrão 341 e 409
-    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_341_409 = {
-        'code': 0,
-        'path': os.path.join(DATA_DIR, 'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc_banco_fav_341_409.json')
-    }
-
-    # Registro de seguimento A tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente. Padrão 341 e 409
-    Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_misc = {
-        'code': 0,
-        'path': os.path.join(DATA_DIR, 'itau_240_registro_seg_A_cheq_op_doc_ted_pix_credcc_banco_fav_misc.json')
-    }
-
-    # Registro de seguimento B tipo cheque, OP, DOC, TED, PIX ou crédito em conta corrente.
-    Itau_SegB_Cheq_OP_DOC_TED_CredCC = {
-        'code': 0,
-        'path': os.path.join(DATA_DIR, 'itau_240_registro_seg_B_cheq_op_doc_ted_credcc.json')
-    }
-
-
 class RegistroCNAB240(BlocoCNAB):
     """Define um registro de detalhes para uma transação que vai dentro de um lote CNAB 240."""
+
+    @staticmethod
+    def get_segment_str(record: str) -> str:
+        """No décimo-quarto carácter, de índice 13, tem a letra do segmento de registro."""
+        return record[13:14].upper()
 
     def __init__(self, record_template):
         # Dispara erro se tipo de registro for inválido/não-implementado.
@@ -152,7 +180,8 @@ class LoteCNAB240(BlocoCNAB):
                 try:
                     total_payment_value += record.content['valor_pagamento']['val']
                 except KeyError:
-                    raise CNAB240KeyError(class_name=record.__class__.__name__, method_name='LoteCNAB240.update_total_payment_value()',
+                    raise CNAB240KeyError(class_name=record.__class__.__name__,
+                                          method_name='LoteCNAB240.update_total_payment_value()',
                                           template_name=self.template,
                                           field_name="RegistroCNAB240.content['valor_pagamento']['val']",
                                           message=f'O campo não foi encontrado no registros.')
@@ -176,7 +205,8 @@ class LoteCNAB240(BlocoCNAB):
             #     record.content['numero_registro']['val'] = self.get_record_count() + 1
             # else:
             #     record.content['numero_registro']['val'] = self.get_record_count()
-            record.content['numero_registro']['val'] = self.get_record_count() - 1  # count + 1 - 2, pra desconsiderar header e trailer da contagem.
+            record.content['numero_registro'][
+                'val'] = self.get_record_count() - 1  # count + 1 - 2, pra desconsiderar header e trailer da contagem.
         except KeyError:
             raise CNAB240KeyError(class_name=record.__class__.__name__, method_name='add(lote)',
                                   template_name=record.template,
@@ -201,6 +231,26 @@ class LoteCNAB240(BlocoCNAB):
 
         # Incrementa contagem de lotes no arquivo.
         self.update_record_count()
+
+    def parse_record_str(self, line: str) -> RegistroCNAB240:
+        # Detecta segmento
+        segment = RegistroCNAB240.get_segment_str(line)
+
+        # Consulta versões do seguimento em questão para o tipo de lote atual
+        for version in self.template['segments'][segment]:
+            print(segment, version['rules'])
+            print(eval_ruleset(line, version['rules']))
+
+            if eval_ruleset(line, version['rules']):
+                # Cria registro com layout específico
+                record = RegistroCNAB240(version['layout'])
+                # Interpreta string e se preenche.
+                record.parse_record_str(line)
+                # Retorna registro criado.
+                return record
+
+        # Se chagmos aqui, não tem layout implementado para essa string ou tem algo errado.
+        raise CNABError(message=f"Nenhum layout válido para \n{line}")
 
 
 class ArquivoCNAB240(BlocoCNAB):
@@ -305,7 +355,7 @@ class ArquivoCNAB240(BlocoCNAB):
 
         batch = None
         for template in BatchTemplate240:
-            if template.value['code'] == layout_code:
+            if layout_code in template.value['code']:
                 batch = LoteCNAB240(template)
 
         if not batch:
@@ -314,10 +364,5 @@ class ArquivoCNAB240(BlocoCNAB):
         batch.parse_header_str(line)
         return batch
 
-    def parse_batch_trailer(self, batch: LoteCNAB240, line: str) -> bool:
-        print(line, self.__class__.__name__)
-        return True
-
-    def new_record_from_str(self, line: str) -> BlocoCNAB:
-        print(line, self.__class__.__name__)
-        return RegistroCNAB240(RecordTemplate240.Itau_SegA_Cheq_OP_DOC_TED_PIX_CredCC_misc)
+    def new_record_from_str(self, batch: LoteCNAB240, line: str) -> BlocoCNAB:
+        return batch.parse_record_str(line)

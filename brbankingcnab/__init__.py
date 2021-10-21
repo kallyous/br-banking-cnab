@@ -115,6 +115,67 @@ def parse_cnab_string(cnab_str, cnab_layout_code, file_template):
 
     cnab_file.fill_cnab_file(lines)
 
+    return cnab_file
+
+
+def eval_rule(record: str, rule: dict) -> bool:
+    """Verifica se string recebida em record obedece à regra descrita.
+
+    Formato de uma regra:
+    {'start': int, 'end': int, 'operation': str, 'value': ... }
+
+    Os valores de start e end devem dar os índices de começo e término da substring que contém o valor a ser testado
+    contra value através a operação definida em operation.
+
+    O conteúdo de value dependerá da operação escolhida:
+
+    equals    :  testa valor exato da substring, value deve ser string
+    in        :  testa valor contra lista de opções válidas, value deve ser lista de strings
+    type-num  :  verifica se string descreve um  número, value é ignorado
+    type-alfa :  verifica se string descreve letras, value é ignorado
+
+    Returna True caso obedeça ou False caso contrário.
+    """
+
+    start = rule['start']
+    end = rule['end']
+    value = record[start:end]
+
+    if rule['operation'] == 'equals':
+        if value == rule['value']:
+            return True
+        return False
+
+    elif rule['operation'] == 'in':
+        if value in rule['value']:
+            return True
+        return False
+
+    elif rule['operation'] == 'type-num':
+        if value.isnumeric():
+            return True
+        return False
+
+    elif rule['operation'] == 'type-alfa':
+        if not value.isnumeric():
+            return True
+        return False
+
+    else:
+        raise CNABError(message=f"Regra de variante de registro inválida: {rule}")
+
+
+def eval_ruleset(record: str, ruleset: list):
+    """Testa string recebida em record contra todas as regras de uma lista recebida em ruleset.
+    Retorna True se todas as regras sejam respeitadas ou False caso ao menos uma seja violada.
+    Note que segmentos únicos tem uma lista vazia de regras, então esta função retornará True imediatamente.
+    """
+
+    for rule in ruleset:
+        if not eval_rule(record, rule):
+            return False
+    return True
+
 
 class BlocoCNAB:
     """Declaração apenas, para melhor implementação da interface.
@@ -202,20 +263,19 @@ class BlocoCNAB:
         while len(content) > 0:
             line = content.pop(0)
             if self.is_batch_header(line):
-                # TODO: cria novo arquivo de lote e interpreta cabeçalho
+                # Cria novo arquivo de lote e interpreta cabeçalho
                 batch = self.new_batch_from_header(line)
                 line = content.pop(0)
                 while self.is_record(line):
-                    # TODO: cria registro de operação e interpreta conteúdo.
-                    record = self.new_record_from_str(line)
-                    # batch.add(record)
+                    # Cria registro de operação e interpreta conteúdo, adicionando ao lote.
+                    batch.add(self.new_record_from_str(batch, line))
                     line = content.pop(0)
                 # Ao chegarmos aqui, é obrigatório que line seja trailer de lote.
                 if not self.is_batch_trailer(line):
                     raise CNABError(message="CNAB inválido.")
                 # Interpreta a linha de trailer de lote. Retorna bool indicando se tudo está correto e válido.
                 batch.parse_trailer_str(line)
-                # self.add(batch)
+                self.add(batch)
             else:
                 # Só se chega aqui com linhas de trailer de lote.
                 raise CNABError(message="CNAB inválido.")
@@ -283,6 +343,26 @@ class BlocoCNAB:
                 self.header[item]['val'] = int(value)
             print(item, self.header[item]['val'])
 
+    def parse_record_str(self, record: str) -> BlocoCNAB:
+        """Interpreta string de registro de detalhe e retorna dict preenchido."""
+        print(record, self.__class__.__name__)
+
+        if self.enclosed:
+            me = self.__class__.__name__
+            raise CNABError(message=f"{me}.parse_record_str() é inválido.")
+
+        for item in self.content:
+            start = self.content[item]['index']
+            end = self.content[item]['index'] + self.content[item]['size']
+            value = record[start:end]
+            if self.content[item]['type'] == "alfanum":
+                self.content[item]['val'] = value
+            else:
+                self.content[item]['val'] = int(value)
+            print(item, self.content[item]['val'])
+
+        return self
+
     def parse_trailer_str(self, trailer: str):
         """Interpreta string trailer de arquivo/lote e retorna dict preenchido."""
         print(trailer, self.__class__.__name__)
@@ -311,5 +391,5 @@ class BlocoCNAB:
     def new_batch_from_header(self, line: str) -> BlocoCNAB:
         pass
 
-    def new_record_from_str(self, line: str) -> BlocoCNAB:
+    def new_record_from_str(self, batch: BlocoCNAB, line: str) -> BlocoCNAB:
         pass
