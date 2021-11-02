@@ -326,4 +326,7 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/python,django,pycharm
 
 # Custom personal use shitness
+cnab.txt
 quick-test.py
+tmp/
+ref/
